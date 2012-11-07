@@ -1,0 +1,10 @@
+function imOut = gaussianConv(image_path,sigma_x,sigma_y)
+
+    im = imread(image_path);
+    hcol = gaussian(sigma_y);
+    hrow = gaussian(sigma_x);
+    imOut = conv2(hcol,hrow,im);
+    
+end
+
+%C:\Users\Toby\Documents\VISION\Practical\Week 1\
