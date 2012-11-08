@@ -1,3 +1,13 @@
+% function F= ImageDerivatives (img ,sigma , type )
+% compute a derivative of 'type' with smoothing 'sigma' and convole img
+% with this derivative.
+% INPUT
+% - img: input image (grayscale)
+% - sigma: smoothing of the gaussian, sigma
+% - type: The type of derivative can be 'x', 'xx', 'y', 'yy', 'xxy', 'xyy'
+%
+% OUTPUT
+% - F image convolved with the specified derivative
 function F= ImageDerivatives (img ,sigma , type )
     G = gaussian(sigma);
     Gd = gaussianDer(G,sigma);

@@ -1,3 +1,11 @@
+% function F= ImageDerivatives (img ,sigma , type )
+% compute a derivative of 'type' with smoothing 'sigma' and convole img
+% with this derivative.
+% INPUT
+% - 
+%
+% OUTPUT
+% - 
 function F= ImageDerivatives (img ,sigma , type )
     G = gaussian(sigma);
     Gd = gaussianDer(G,sigma);
@@ -13,7 +21,10 @@ function F= ImageDerivatives (img ,sigma , type )
         F = conv2(G,conv2(Gdd',img));
     elseif strcmp(type,'xy') || strcmp(type,'yx')
         F = conv2(Gd',conv2(Gd,img));
-    elseif strcmp(type,'xxy')
+    elseif strcmp(type,'xxy') || strcmp(type,'yx')
+        F = conv2(Gd',conv2(Gdd,img));
+    elseif strcmp(type,'xyy') || strcmp(type,'yyx')
+        F = conv2(Gd,conv2(Gdd',img));
     end
     F = F(1+L:end-L,1+L:end-L);
 end
