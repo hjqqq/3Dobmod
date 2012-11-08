@@ -10,9 +10,10 @@ function F= ImageDerivatives (img ,sigma , type )
     elseif strcmp(type,'xx')
         F = conv2(G',conv2(Gdd,img));
     elseif strcmp(type,'yy')
-        F = conv2(G',conv2(Gdd,img));
+        F = conv2(G,conv2(Gdd',img));
     elseif strcmp(type,'xy') || strcmp(type,'yx')
-        F 0
+        F = conv2(Gd',conv2(Gd,img));
+    elseif strcmp(type,'xxy')
     end
     F = F(1+L:end-L,1+L:end-L);
 end
