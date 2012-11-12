@@ -1,34 +1,41 @@
-%Harris corner detecter
-function [r,c] = Harris(im,n)
+function HarrisKR(im,n)
 if nargin < 1
      n = 3;
 end
+
+xl=size(im,2);
+yl=size(im,1);
+
 k = 0.04;
 
+w=fspecial('gaussian',3,1);
 
-r = [];
-c = [];
-
-sigma = 0.1;
+sigma = 1;
 G = gaussian(sigma);
 Gd = gaussianDer(G,sigma);
 L = (length(Gd)-1)/2;
 
-%derivatives in x and y
 Ix = conv2(Gd,conv2(G',im));
 Ix = Ix(1+L:end-L,1+L:end-L);
 Iy = conv2(Gd',conv2(G,im));
 Iy = Iy(1+L:end-L,1+L:end-L);
 
-IxIy = Ix.*Iy;
-IxIx = Ix.*Ix;
-IyIy = Iy.*Iy;
+M=zeros(2);
+R=zeros(size(im));
 
-Det   = IxIx.*IyIy - IxIy.*IxIy;
-Trace = IxIx + IyIy;
+for i=2:xl-1
+    for j=2:yl-1
+        M(1,1)=sum(sum(w.*Ix(j-1:j+1,i-1:i+1).*Ix(j-1:j+1,i-1:i+1)));
+        M(1,2)=sum(sum(w.*Ix(j-1:j+1,i-1:i+1).*Iy(j-1:j+1,i-1:i+1)));
+        M(2,1)=M(1,2);
+        M(2,2)=sum(sum(w.*Iy(j-1:j+1,i-1:i+1).*Iy(j-1:j+1,i-1:i+1)));
+        
+        R(j,i)=det(M)-k*trace(M)^2;
+        
+        
+    end
+end
 
-R = Det - k*(Trace.*Trace);
-
-corners = (R > 0);
-
-imshow(corners,[])
+figure(2)
+imshow(R,[])
+end
