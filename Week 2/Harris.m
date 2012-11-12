@@ -1,4 +1,4 @@
-function HarrisKR(im,n)
+function R = Harris(im,n)
 if nargin < 1
      n = 3;
 end
@@ -10,32 +10,20 @@ k = 0.04;
 
 w=fspecial('gaussian',3,1);
 
-sigma = 1;
-G = gaussian(sigma);
-Gd = gaussianDer(G,sigma);
-L = (length(Gd)-1)/2;
+Ix = conv2(im,[-1,0,1],'same');
+Iy = conv2(im,[-1,0,1]','same');
 
-Ix = conv2(Gd,conv2(G',im));
-Ix = Ix(1+L:end-L,1+L:end-L);
-Iy = conv2(Gd',conv2(G,im));
-Iy = Iy(1+L:end-L,1+L:end-L);
+Ixx = Ix.*Ix;
+Iyy = Iy.*Iy;
+Ixy = Ix.*Iy;
 
-M=zeros(2);
-R=zeros(size(im));
+M1 = conv2(Ixx,w,'same');
+M2 = conv2(Ixy,w,'same');
+M4 = conv2(Iyy,w,'same');
 
-for i=2:xl-1
-    for j=2:yl-1
-        M(1,1)=sum(sum(w.*Ix(j-1:j+1,i-1:i+1).*Ix(j-1:j+1,i-1:i+1)));
-        M(1,2)=sum(sum(w.*Ix(j-1:j+1,i-1:i+1).*Iy(j-1:j+1,i-1:i+1)));
-        M(2,1)=M(1,2);
-        M(2,2)=sum(sum(w.*Iy(j-1:j+1,i-1:i+1).*Iy(j-1:j+1,i-1:i+1)));
-        
-        R(j,i)=det(M)-k*trace(M)^2;
-        
-        
-    end
-end
+Det = M1.*M4 - M2.^2;
+Tr  = M1 + M4;
+R = Det - k*Tr.^2;
 
-figure(2)
 imshow(R,[])
 end
