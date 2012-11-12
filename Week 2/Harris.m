@@ -1,14 +1,13 @@
-function R = Harris(im,n)
-if nargin < 1
-     n = 3;
+function loc = Harris(im,n,t)
+if nargin < 2
+     n = 1;
 end
 
-xl=size(im,2);
-yl=size(im,1);
-
+loc = [];
 k = 0.04;
 
-w=fspecial('gaussian',3,1);
+sigma = 2;
+w=fspecial('gaussian',ceil(6*sigma),sigma);
 
 Ix = conv2(im,[-1,0,1],'same');
 Iy = conv2(im,[-1,0,1]','same');
@@ -25,5 +24,18 @@ Det = M1.*M4 - M2.^2;
 Tr  = M1 + M4;
 R = Det - k*Tr.^2;
 
-imshow(R,[])
+for i = 1+n:size(im,1)-n
+    for j= 1+n:size(im,2)-n
+        middle = R(i,j);
+        if middle > t
+            Patch = R(i-n:i+n,j-n:j+n);
+            if sum(middle<Patch) < 1
+                loc = [loc;j,i];
+            end
+        end
+    end
+end
+
+
+
 end
