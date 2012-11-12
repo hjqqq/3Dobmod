@@ -1,0 +1,23 @@
+%Harris corner detecter
+function [r,c] = Harris(im,n)
+if nargin < 1
+     n = 3;
+end
+
+r = [];
+c = [];
+
+sigma = 8.325;
+G = gaussian(sigma);
+Gd = gaussianDer(G,sigma);
+L = (length(Gd)-1)/2;
+
+%derivatives in x and y
+Ix = conv2(Gd,conv2(G',im));
+Ix = Ix(1+L:end-L,1+L:end-L);
+Iy = conv2(Gd',conv(G,im));
+Iy = Iy(1+L:end-L,1+L:end-L);
+
+M = Ix(:)
+
+imshow(dx,[])
