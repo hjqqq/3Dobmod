@@ -1,4 +1,4 @@
-function [matches,scores]=runningSIFT(im1,im2)
+function [matches,f2]=runningSIFT(im1,im2)
 if nargin <1
 close all
 % loading the image
@@ -44,16 +44,29 @@ d2 = vl_siftdescriptor(grad2,f2);
 [f2,d2]=vl_sift(im2); %same but then for second image
 [matches, scores] = vl_ubcmatch(d1, d2) ;
 % this is plotting the matching points
-imshow(im1,[]);
+imshow([im1 im2],[]);
 hold on;
-h1 = vl_plotframe(f1(:,matches(1,:)));
+f1match=f1(:,matches(1,:));
+h1 = vl_plotframe(f1match);
 set(h1,'color','y','linewidth',2) ;
-hold off;
-figure(2);
-hold on;
-imshow(im2,[]);
-h2 = vl_plotframe(f2(:,matches(2,:)));
+
+f2shift=f2(:,matches(2,:))
+f2shift(1,:)=f2shift(1,:)+size(im1,2);
+h2 = vl_plotframe(f2shift);
 set(h2,'color','y','linewidth',2) ;
-hold off;
+
+%plot the lines between the matches
+for i=1:size(matches,2)
+    plot([f1match(1,i)' f2shift(1,i)'],[f1match(2,i)' f2shift(2,i)'],'-m')
+end
+
+
+% hold off;
+% figure(2);
+% hold on;
+% imshow(im2,[]);
+% h2 = vl_plotframe(f2(:,matches(2,:)));
+% set(h2,'color','y','linewidth',2) ;
+% hold off;
 
 
