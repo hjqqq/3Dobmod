@@ -2,15 +2,17 @@ function [f1,f2]=runningSIFT(im1,im2)
 close all
 if nargin <1
 % loading the image
-im1 = loadImage('landscape-a.jpg');
-im2 = loadImage('landscape-b.jpg');
-im1 = single(im1);
-im2 = single(im2);
+im1 = imread('landscape-a.jpg');
+im2 = imread('landscape-b.jpg');
+im1 = single(im1(:,:,1));
+im2 = single(im2(:,:,1));
 end
 %% HARRIS
 % now we get the keypoints
- loc1=Harris(im1./255,0.000001)';
- loc2=Harris(im2./255,0.000001)';
+ loc1=Harris(im1./255,0.000001,0.003)';
+ display('first image processed')
+ loc2=Harris(im2./255,0.000001,0.003)';
+ display('second image processed')
  f1=[loc1;zeros(1,size(loc1,2))];
  f2=[loc2;zeros(1,size(loc2,2))];
  
