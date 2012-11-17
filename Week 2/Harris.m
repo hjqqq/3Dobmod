@@ -1,11 +1,18 @@
-%function Rfeat = Harris(im,t)
+%function Rfeat = Harris(im,t,t2)
 %
-function loc = Harris(im,t)
+%INPUT
+%-im: input image, should be double and normalized between 0 and 1
+%-t:  threshold for R (cornerness) to discard flat surfaces
+%     (typically set to 0.0000001 or 10^-7)
+%-t2: second check of the found corner (typically set to 0.003)
+%     tests wether there is a peak at the tested scale (laplacian)
+
+function loc = Harris(im,t,t2)
 k = 0.04;
 mFactor = 1.4;
 loc = [];
 
-sigmas = 1*mFactor.^(0:9);
+sigmas = 2*mFactor.^(0:12);
 %loc = cell(1,length(sigmas));
 for n = 1:length(sigmas)
     %Calculate sigma for integration and derivative
@@ -43,13 +50,13 @@ for n = 1:length(sigmas)
     Rfeat = Rmax & Rthr;
     
     % for every point detect max scale or reject
-    step = (1/9)*sigmaI*(mFactor-1/mFactor);
+    nScales = 8;
+    step = (1/(nScales-1))*sigmaI*(mFactor-1/mFactor);
     sigmaS = sigmaI/mFactor:step:sigmaI*mFactor;
-    Laplace = cell(1,10);
-    responses = zeros(sum(sum(Rfeat)),10);
+    responses = zeros(sum(sum(Rfeat)),nScales);
     columns = size(Rfeat,2);
     rows = size(Rfeat,1);
-    for ind = 1:10
+    for ind = 1:nScales
         GS = gaussian(sigmaS(ind));
         GSdd = gaussianDer2(GS,sigmaS(ind));
         Laplace = sigmaS(ind)^2 * (GS'*GSdd+GSdd'*GS);
@@ -60,7 +67,7 @@ for n = 1:length(sigmas)
                 if Rfeat(i,j) == 1
                     num = num+1;
                     if i-L <= 0 || i+L > rows || j-L <= 0 || j+L > columns
-                        responses(num,ind) = 0;
+                        responses(num,ind) = NaN;
                     else
                         res = sum(sum((im(i-L:i+L,j-L:j+L).*Laplace)));
                         responses(num,ind) = res;
@@ -70,19 +77,30 @@ for n = 1:length(sigmas)
         end
     end
     
-    [~,peaks] = max(abs(responses),[],2);
+    [peaks,peaklocs] = max(responses,[],2);
+    [valleys,valleylocs] = min(responses,[],2);
+    maxima = peaks > responses(:,1) & peaks > responses(:,nScales);
+    minima = valleys < responses(:,1) & valleys < responses(:,nScales);
+    %extrema = xor(maxima,minima) & ~any(isnan(responses),2);
+    extremum = abs(peaks) > abs(valleys);
+    extremumVal = max(abs(peaks),abs(valleys));
+    extremaLocs = peaklocs.*extremum+valleylocs.*~extremum;
+    p = 1/8;
+    curvature = conv2(responses,[-p,-p,p,p,p,p,-p,-p],'valid');
+    extrema = abs(curvature)> t2;% & xor(maxima,minima);
     num = 0;
     for j = 1:columns
         for i = 1:rows
             if Rfeat(i,j) == 1
                 num = num+1;
-                if peaks(num) ~= 1 && peaks(num) ~= 10
-                    loc = [loc; j,i,sigmaS(peaks(num))];
+                if extrema(num)
+                    loc = [loc; j,i,sigmaS(extremaLocs(num)),extremumVal(num)];
                 end
             end
         end
     end
+    
 end
-
+loc = filterLoc(loc);
 
 end
