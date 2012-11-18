@@ -1,4 +1,14 @@
-function loc = DoG(im)
+%function loc = DoG(im,tf)
+% uses the difference of gaussian approach for finding the local feature
+% points.
+%
+%INPUT
+%-im: image (grayscale)
+%-tf: flatness threshold (typically 0.01)
+%
+%OUTPUT
+%-loc: a matrix of nx3 with n found locations with [x,y,sigma] for columns
+function loc = DoG(im,tf)
 loc = [];
 
 %prior smoothing sigma
@@ -39,12 +49,15 @@ for cascade = 1:noCascades
     %check nearby extrema in subsequent layers
     imExtrema = imregionalmax(imDoG);
     imExtrema = imExtrema(:,:,2:end-1);
-
+    
     for i = 1:levels
         % current sigma
         scale = 2^(cascade-1);
         sigmaC = scale*sigmaP*(k^(i-1));
         [row,col] = find(imExtrema(:,:,i)==1);
+        %test flatness
+        flat = abs(diag(imDoG(row,col,i+1))) < tf;
+        row = row(flat==0); col = col(flat==0);
         loc = [loc; round(scale*col),round(scale*row),...
                     repmat(sigmaC,length(row),1)];
     end
