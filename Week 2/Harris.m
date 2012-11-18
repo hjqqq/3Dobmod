@@ -101,6 +101,6 @@ for n = 1:length(sigmas)
     end
     
 end
-loc = filterLoc(loc);
+loc = filterLoc(loc,2);
 
 end
