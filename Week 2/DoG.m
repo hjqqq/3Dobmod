@@ -50,6 +50,8 @@ for cascade = 1:noCascades
     imExtrema = imregionalmax(imDoG);
     imExtrema = imExtrema(:,:,2:end-1);
     
+    %put local maxima in vector with corresponding sigma and test for
+    %flatness
     for i = 1:levels
         % current sigma
         scale = 2^(cascade-1);
