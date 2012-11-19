@@ -18,3 +18,8 @@ end
 imshow(newim,[]);
 hold on;
 plot([p1(1,:);p1t(1,:) + size(im1,2)],[p1(2,:);p1t(2,:)],'r')
+pause()
+clf
+TFORM = maketform('affine',[M;0,0]);
+im1t = imtransform(im1,TFORM);
+imshow(im1t,[]);
