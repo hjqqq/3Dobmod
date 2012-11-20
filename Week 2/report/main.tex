@@ -52,7 +52,15 @@ To improve this a post proccesing step is added to remove multiple responses alo
 
 \section{Harris Laplace Corner Detector}
 
+We also implemented the simplified Harris-Laplace detector as discussed by Mikolajczyk \cite{Miko}. This method follows the same approach as the Harris corner detector but for every points tests a finer range of sigmas thereby finding the local profile of the Laplacian. The extremum of the Laplacian can now be more accurately found. If the extremum is at the edge then the point is discarded as the extremum of the Laplacian lies on a different level. The same post processing step as applied in the Harris corner detector is used here. This method found 578 features. Results are shown in figure \ref{fig:HL}.
 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{img/HarrisLaplace.png}
+\caption{Detected corners with the Harris-Laplace corner detector}
+\label{fig:HL}
+\end{figure}
 
 \section{Difference of Gaussians Corner Detector}
 
@@ -61,25 +69,19 @@ A much faster implementation for corner detection is by estimating the Laplacian
 D(x,y,\sigma) = (G(x,y,k\sigma) - G(x,y,\sigma)) * I(x,y)
 \end{equation}
 This approximates the Laplacian.\\
-Next local extrema are detected by finding the local maxima in the 26 connected component neighbourhoud of the scale space.
+Next local extrema are detected by finding the local maxima in the 26 connected component neighbourhood of the scale space. If these local extrema have a respons bigger then a threshold ($D(x,y,\sigma) > 0.01$) then the detected point is not flat. But this filter is still very responsive to edges and so for every point the local variance components are checked by constructing the Hessian and checking the ratios of the eigen values (as described by Lowe \cite{Lowe}).\\
+The total number of features detected by this method was 460. The result is shown in figure \ref{fig:DoG}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{img/DoG.png}
+\caption{Detected corners using the DoG method}
+\label{fig:DoG}
+\end{figure}
 
 \section{SIFT}
 To match keypoints detected with the corner detection a descriptor is needed. David Lowes SIFT was used to create the SIFT descriptors for these keypoints. The VLFeat\footnote{http://www.vlfeat.org/} open source library was used. \\
-For two images that show the same scene from different viewpoints, we find the corner points in both images and calculated the descriptor for them. Then the points are matched between the two images. The result can be seen in figure \ref{fig:matching} for the Harris Corner Points and in figure \ref{fig:matDoG} for the Difference of Gaussians.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{gull}
-\caption{Matching keypoints in two images of similar scene with Harris Corner Points}
-\label{fig:matching}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{gull}
-\caption{Matching keypoints in two images of similar scene with keypoints found with Difference of Gaussians}
-\label{fig:matDoG}
-\end{figure}
+For two images that show the same scene from different viewpoints, we find the corner points in both images and calculated the descriptor for them. Then the points are matched between the two images. The result can be seen in figure ref{fig:matching} for the Harris Corner Points and in figure ref{fig:matDoG} for the Difference of Gaussians.
 
 \bibliography{mybib}{}
 \bibliographystyle{plain}
