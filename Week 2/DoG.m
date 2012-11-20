@@ -49,17 +49,35 @@ for cascade = 1:noCascades
     %check nearby extrema in subsequent layers
     imExtrema = imregionalmax(imDoG);
     imExtrema = imExtrema(:,:,2:end-1);
+    %eliminate responses on the edge
+    imExtrema(1,:,:) = 0;imExtrema(end,:,:) = 0;
+    imExtrema(:,1,:) = 0;imExtrema(:,end,:) = 0;
+    imDoG = imDoG(:,:,2:end-1);
     
     %put local maxima in vector with corresponding sigma and test for
-    %flatness
+    %flatness enhance location and eliminate edge responses
     for i = 1:levels
         % current sigma
         scale = 2^(cascade-1);
         sigmaC = scale*sigmaP*(k^(i-1));
         [row,col] = find(imExtrema(:,:,i)==1);
         %test flatness
-        flat = abs(diag(imDoG(row,col,i+1))) < tf;
+        flat = abs(diag(imDoG(row,col,i))) < tf;
         row = row(flat==0); col = col(flat==0);
+        %update location
+        
+        %eliminate edge responses
+        edge = zeros(length(row),1);
+        for ind = 1:length(row)
+            x = col(ind);
+            y = row(ind);
+            patch = imDoG(y-1:y+1,x-1:x+1,i);
+            if checkForEdge(patch,10)
+                edge(ind) = 1;
+            end
+        end
+        row = row(edge==0); col = col(edge==0);
+        %add new feature points
         loc = [loc; round(scale*col),round(scale*row),...
                     repmat(sigmaC,length(row),1)];
     end

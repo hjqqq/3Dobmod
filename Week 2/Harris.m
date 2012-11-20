@@ -1,4 +1,4 @@
-%function Rfeat = Harris(im,t,t2)
+%function Rfeat = HarrisLaplace(im,t,t2)
 %
 %INPUT
 %-im: input image, should be double and normalized between 0 and 1
@@ -7,7 +7,7 @@
 %-t2: second check of the found corner (typically set to 0.003)
 %     tests wether there is a peak at the tested scale (laplacian)
 
-function loc = Harris(im,t,t2)
+function loc = HarrisLaplace(im,t,t2)
 k = 0.04;
 mFactor = 1.4;
 loc = [];
