@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{cite}
+
+\title{Harris Corner Detector and SIFT Descriptor}
+\author{Toby Hijzen \& Kristin Rieping}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+To match images or objects in images to each other it is common practice to detect salient points in both images. This increases robustness and reduces complexity as well as the computational cost of matching. These feature points should be robust to rotation, scaling and changes in intensity. Good features that display these properties are corner points. Therefore the focus is on the detection of corners. This report shortly discusses three different methods for detecting corners. The first two are based on the Harris corner detection scheme whereas the third is based on the difference of gaussians (DoG) method. Finally the points of two images are matched to each other using David Lowes SIFT. The results of this are reported for each corner detector.
+
+\section{Harris Corner Detector}
+We implemented the Harris Corner Detector in Matlab. 
+First we computed the cornerness $R$ for every point in the image with
+\begin{equation}
+R = \det(M) - k*(\mathrm{trace}(M))^2
+\end{equation}
+where $k=0.04$ is a constant and
+\begin{equation}
+M = \sum_{x,y} w(x,y) \begin{bmatrix}
+I_x^2 & I_x I_y\\
+I_x I_y & I_y^2
+\end{bmatrix}
+\end{equation}
+The sum above x,y is the patch around the corner point and $w(x,y)$ is gaussian with $\sigma_I$ of the size of this patch. The derivatives ($I$) are calculated by convolving with a Gaussian with $\sigma_D = 0.7 \cdot \sigma_I$ (as was done by \cite{Miko}). This results in an image of the cornerness. In this image only the points above a threshold (in our case $10^{-7}$) were chosen as to eliminate reponses from edges and noise. In this image we find the local maxima by checking whether a pixel value is larger than its neighboring pixel values.\\
+This is subsequently done for a range of sigma. The range is specified as follows:
+\[
+\sigma_n = \sigma_\mathrm{init} \cdot \alpha^n
+\]
+We chose for n a range of 0 to 10 and set $\alpha = 1.4$ (shown to work well \cite{lindeberg}) and set $\sigma_\mathrm{init} = 2$. This resulted in 1869 feature points for our test image shown in figure \ref{fig:mountain}.\\
+To improve this a post proccesing step is added to remove multiple responses along different scales. Every salient point is tested wether it is adjacent to another point (both in sigma and distance). If this is the case only the best point is kept being the point with the highest responce to the Laplacian with $\sigma_\mathrm{Laplacian} = \sigma_I$. This resulted in 794 feature points. The result is shown in figure \ref{fig:Harris}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.5\textwidth]{img/mountain.jpg}
+\caption{Detected corners with the Harris corner detector}
+\label{fig:mountain}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{img/Harris.png}
+\caption{Detected corners with the Harris corner detector}
+\label{fig:Harris}
+\end{figure}
+
+\section{Harris Laplace Corner Detector}
+
+
+
+\section{Difference of Gaussians Corner Detector}
+
+A much faster implementation for corner detection is by estimating the Laplacian using difference of gaussians. The implementation was followed from David Lowes paper \cite{Lowe}. The Difference of gaussians is calculated in a scale space with the difference of gaussians defined as
+\begin{equation}
+D(x,y,\sigma) = (G(x,y,k\sigma) - G(x,y,\sigma)) * I(x,y)
+\end{equation}
+This approximates the Laplacian.\\
+Next local extrema are detected by finding the local maxima in the 26 connected component neighbourhoud of the scale space.
+
+\section{SIFT}
+To match keypoints detected with the corner detection a descriptor is needed. David Lowes SIFT was used to create the SIFT descriptors for these keypoints. The VLFeat\footnote{http://www.vlfeat.org/} open source library was used. \\
+For two images that show the same scene from different viewpoints, we find the corner points in both images and calculated the descriptor for them. Then the points are matched between the two images. The result can be seen in figure \ref{fig:matching} for the Harris Corner Points and in figure \ref{fig:matDoG} for the Difference of Gaussians.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{gull}
+\caption{Matching keypoints in two images of similar scene with Harris Corner Points}
+\label{fig:matching}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{gull}
+\caption{Matching keypoints in two images of similar scene with keypoints found with Difference of Gaussians}
+\label{fig:matDoG}
+\end{figure}
+
+\bibliography{mybib}{}
+\bibliographystyle{plain}
+
+\end{document}
+

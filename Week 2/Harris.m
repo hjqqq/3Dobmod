@@ -10,7 +10,7 @@ k = 0.04;
 mFactor = 1.4;
 loc = [];
 
-sigmas = 2*mFactor.^(0:12);
+sigmas = 2*mFactor.^(0:10);
 %loc = cell(1,length(sigmas));
 for n = 1:length(sigmas)
     %Calculate sigma for integration and derivative
@@ -47,7 +47,23 @@ for n = 1:length(sigmas)
     Rthr = R>t;
     Rfeat = Rmax & Rthr;
     
+    %find locations and add laplacian response
+    Gxx = G'*gaussianDer2(G,sigmaI);
+    Laplace = sigmaI^2*(Gxx + Gxx');
+    L = (length(Gxx)-1)/2;
+    columns = size(Rfeat,2); rows = size(Rfeat,1);
+    for j = 1:columns
+        for i = 1:rows
+            if Rfeat(i,j)
+                if i-L > 0 && i+L <= rows && j-L > 0 && j+L <= columns
+                    res = abs(sum(sum((im(i-L:i+L,j-L:j+L).*Laplace))));
+                    loc = [loc; j,i,sigmaI,res];
+                end
+            end
+        end
+    end
+    
 end
-loc = filterLoc(loc,2);
+loc = filterLoc(loc,2,2);
 
 end
