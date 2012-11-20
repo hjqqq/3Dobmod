@@ -1,7 +1,9 @@
-% function T = RANSAC(N)
+% function T = RANSAC(N,p1,p2)
 %
 % INPUT
-% - N: Number of iterations
+% - N:  Number of iterations
+% - p1: point locations in first image (2xn matrix)
+% - p2: point locations in second image (2xn matrix)
 %
 % OUTPUT
 % - T: Translation

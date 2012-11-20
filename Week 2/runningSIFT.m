@@ -21,6 +21,7 @@ end
  display('first image processed with DoG')
  loc2=DoG(im2./255)';
  display('second image processed with DoG')
+
  f1=[loc1;zeros(1,size(loc1,2))];
  f2=[loc2;zeros(1,size(loc2,2))];
  
@@ -63,18 +64,4 @@ set(h2,'color','y','linewidth',2) ;
 for i=1:size(matches,2)
     plot([f1match(1,i)' f2shift(1,i)'],[f1match(2,i)' f2shift(2,i)'],'-m')
 end
-
-%% Somecode
-% might be handy
-% [m1,o1]=gradmag(im1,1);
-% [m2,o2]=gradmag(im2,1);
-% o1=o1+2*pi*(o1<0);
-% o2=o2+2*pi*(o2<0);
-% grad1(1,:,:)=m1;
-% grad1(2,:,:)=o1;
-% grad2(1,:,:)=m2;
-% grad2(2,:,:)=o2;
-%the keypoints should be gained with harris, just for thesting now !!!!!!!!!!!!!
-%[f1,~] = vl_sift(im1); %here Harris
-%[f2,~] = vl_sift(im2); %here Harris
 
