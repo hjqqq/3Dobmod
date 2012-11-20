@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage[margin=0.5in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
@@ -38,14 +39,14 @@ To improve this a post proccesing step is added to remove multiple responses alo
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.5\textwidth]{img/mountain.jpg}
+\includegraphics[width=0.7\textwidth]{img/mountain.jpg}
 \caption{Detected corners with the Harris corner detector}
 \label{fig:mountain}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{img/Harris.png}
+\includegraphics[width=0.7\textwidth]{img/Harris.png}
 \caption{Detected corners with the Harris corner detector}
 \label{fig:Harris}
 \end{figure}
@@ -57,7 +58,7 @@ We also implemented the simplified Harris-Laplace detector as discussed by Mikol
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{img/HarrisLaplace.png}
+\includegraphics[width=0.7\textwidth]{img/HarrisLaplace.png}
 \caption{Detected corners with the Harris-Laplace corner detector}
 \label{fig:HL}
 \end{figure}
@@ -74,14 +75,28 @@ The total number of features detected by this method was 460. The result is show
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{img/DoG.png}
+\includegraphics[width=0.7\textwidth]{img/DoG.png}
 \caption{Detected corners using the DoG method}
 \label{fig:DoG}
 \end{figure}
 
 \section{SIFT}
 To match keypoints detected with the corner detection a descriptor is needed. David Lowes SIFT was used to create the SIFT descriptors for these keypoints. The VLFeat\footnote{http://www.vlfeat.org/} open source library was used. \\
-For two images that show the same scene from different viewpoints, we find the corner points in both images and calculated the descriptor for them. Then the points are matched between the two images. The result can be seen in figure ref{fig:matching} for the Harris Corner Points and in figure ref{fig:matDoG} for the Difference of Gaussians.
+For two images that show the same scene from different viewpoints, we find the corner points in both images and calculated the descriptor for them. Then the points are matched between the two images. The result can be seen in figure \ref{fig:matching} for the Harris Corner Points and in figure \ref{fig:matDoG} for the Difference of Gaussians.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{img/matchesLaplace.png}
+\caption{Detected corners using the DoG method}
+\label{fig:matching}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{img/matchesDoG.png}
+\caption{Detected corners using the DoG method}
+\label{fig:matDoG}
+\end{figure}
 
 \bibliography{mybib}{}
 \bibliographystyle{plain}
