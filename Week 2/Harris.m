@@ -10,7 +10,7 @@ k = 0.04;
 mFactor = 1.4;
 loc = [];
 
-sigmas = 2*mFactor.^(0:10);
+sigmas = 2*mFactor.^(2:10);
 %loc = cell(1,length(sigmas));
 for n = 1:length(sigmas)
     %Calculate sigma for integration and derivative

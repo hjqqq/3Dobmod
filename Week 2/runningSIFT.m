@@ -9,21 +9,21 @@ im2 = single(im2(:,:,1));
 end
 %% HARRIS
 % now we get the keypoints
-%  loc1=Harris(im1./255,0.000001,0.003)';
-%  display('first image processed with Harris')
-%  loc2=Harris(im2./255,0.000001,0.003)';
-%  display('second image processed with Harris')
-%  f1=[loc1;zeros(1,size(loc1,2))];
-%  f2=[loc2;zeros(1,size(loc2,2))];
- 
- %% DoG
- loc1=DoG(im1./255)';
- display('first image processed with DoG')
- loc2=DoG(im2./255)';
- display('second image processed with DoG')
-
+ loc1=Harris(im1./255,0.000001)';
+ display('first image processed with Harris')
+ loc2=Harris(im2./255,0.000001)';
+ display('second image processed with Harris')
  f1=[loc1;zeros(1,size(loc1,2))];
  f2=[loc2;zeros(1,size(loc2,2))];
+ 
+ %% DoG
+%  loc1=DoG(im1./255,0.01)';
+%  display('first image processed with DoG')
+%  loc2=DoG(im2./255,0.01)';
+%  display('second image processed with DoG')
+% 
+%  f1=[loc1;zeros(1,size(loc1,2))];
+%  f2=[loc2;zeros(1,size(loc2,2))];
  
  
  
