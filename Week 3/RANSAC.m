@@ -11,8 +11,10 @@
 function [bestT, bestM] = RANSAC(N,p1,p2)
 
 bestInliers = 0;
+bestLS = 100000;
 bestT = NaN;
 bestM = NaN;
+size(p1,2)
 for round=1:N
     permutation = randperm(size(p1,2));
     p1p = p1(:,permutation(1:3));
@@ -32,19 +34,23 @@ for round=1:N
     
     % determine number of inliers
     inliers = 0;
+    LS=0;
     for i=1:size(p1,2)
         p2estimate = M*p1(:,i) + T;
-        if norm(p2estimate-p2(:,i)) < 10
+        nor=norm(p2estimate-p2(:,i));
+        if nor < 10
             inliers = inliers+1;
+            LS=LS+nor;
         end
     end
     
     % if number of inliers is better update best transformation estimate
-    if inliers > bestInliers
+    if inliers > bestInliers && LS < bestLS
         bestInliers = inliers;
         bestT = T;
         bestM = M;
         display(inliers)
+        round
     end
 end
 
