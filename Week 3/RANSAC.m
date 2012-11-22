@@ -33,7 +33,7 @@ for round=1:N
     end
     
     % if number of inliers is better update best transformation estimate
-    if inliers > bestInliers || (inliers == bestInliers && LS < bestLS)
+    if inliers > bestInliers ||(inliers == bestInliers && LS < bestLS)
         bestInliers = inliers;
         bestLS = LS;
         bestT = T;

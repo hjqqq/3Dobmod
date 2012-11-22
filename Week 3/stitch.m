@@ -17,6 +17,7 @@ p2 = f2match(1:2,:);
 %perform RANSAC to find transformation
 [T, M] = RANSAC(1000,p1,p2);
 %transform the 2cnd image
+
 A = [M,T;0,0,1];
 tA = maketform('affine',A');
 tI = maketform('affine',eye(3));
