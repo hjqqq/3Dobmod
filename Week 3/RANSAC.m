@@ -14,7 +14,6 @@ bestInliers = 0;
 bestLS = 100000;
 bestT = NaN;
 bestM = NaN;
-bestIntin = [];
 size(p1,2)
 for round=1:N
 
@@ -37,11 +36,9 @@ for round=1:N
     if inliers > bestInliers || (inliers == bestInliers && LS < bestLS)
         bestInliers = inliers;
         bestLS = LS;
-        bestIntin = intin;
-        bestT = T
-        bestM = M
-        round
-        display(inliers)
+        bestT = T;
+        bestM = M;
+        display(['best number of inliers: ',num2str(inliers)])
     end
 end
 
