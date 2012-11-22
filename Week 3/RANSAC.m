@@ -34,7 +34,7 @@ for round=1:N
     end
     
     % if number of inliers is better update best transformation estimate
-    if inliers > bestInliers && LS < bestLS
+    if inliers > bestInliers || (inliers == bestInliers && LS < bestLS)
         bestInliers = inliers;
         bestLS = LS;
         bestIntin = intin;
@@ -45,18 +45,18 @@ for round=1:N
     end
 end
 
-MatT=[];
-MatM=[];
-bestIntin
-size(p1)
-
-for j=1:2*length(bestIntin)
-    [T,M]=maakMat(p1(:,bestIntin),p2(:,bestIntin));
-    MatT=[MatT;T'];
-    MatM=[MatM;M];   
-end
-
-[bestT,bestM]=meanMatrix(MatT,MatM);
+% MatT=[];
+% MatM=[];
+% bestIntin
+% size(p1)
+% 
+% for j=1:2*length(bestIntin)
+%     [T,M]=maakMat(p1(:,bestIntin),p2(:,bestIntin));
+%     MatT=[MatT;T'];
+%     MatM=[MatM;M];   
+% end
+% 
+% [bestT,bestM]=meanMatrix(MatT,MatM);
 
 end
 
