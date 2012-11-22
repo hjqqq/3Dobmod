@@ -1,5 +1,5 @@
 function xdata = stitch(im1,im2);
-
+close all
 if nargin<1
     im1 = single(rgb2gray(imread('boat/left.jpg')));
     im2 = single(rgb2gray(imread('boat/right.jpg')));
@@ -36,7 +36,7 @@ size(B)
 im3=zeros(size(im1,1),size(B,2)-floor(T(1)));
 T(2)
 ydata(1)
-shi=-floor((T(2))-2*ydata(1))
+shi=round(ydata)-round(T(2))
 
 im3(1:size(im1,1),1:size(im1,2))=im1;
 im3(shi:shi+size(B,1)-1,end-size(B,2)+1:end)=B;
