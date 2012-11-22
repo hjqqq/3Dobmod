@@ -18,9 +18,9 @@ p1 = f1match(1:2,:);
 p2 = f2match(1:2,:);
 
 %perform RANSAC to find transformation
-[T, M] = RANSAC(10000,p1,p2);
-T
-
+[T, M] = RANSAC(1000,p1,p2);
+T;
+xdata=0;
 %transform the 2cnd image
 tt = maketform('affine',[M [0;0];0 0 1 ]);
 [B,xdata,ydata]=imtransform(im2,tt);
@@ -37,9 +37,9 @@ im3=zeros(size(im1,1),size(B,2)-floor(T(1)));
 T(2)
 ydata(1)
 shi=-floor((T(2))-2*ydata(1))
-im3(shi:shi+size(B,1)-1,end-size(B,2)+1:end)=B;
-im3(1:size(im1,1),1:size(im1,2))=im1;
 
+im3(1:size(im1,1),1:size(im1,2))=im1;
+im3(shi:shi+size(B,1)-1,end-size(B,2)+1:end)=B;
 figure(3)
 imshow(im3,[])
 %return new image
