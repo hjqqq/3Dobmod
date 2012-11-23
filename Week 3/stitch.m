@@ -1,49 +1,57 @@
-function xdata = stitch(im1,im2);
-close all
+% im3 = stitch(im1,im2,mode)
+%
+% INPUT
+% - im1: first image should be grayscale and of single precision
+% - im2: second image should be grayscale and of single precision
+% - mode: can be either 'affine' or 'projective'
+%
+% OUTPUT
+% - im3: stitched image
+function im3 = stitch(im1,im2,mode);
+
+
 if nargin<1
     im1 = single(rgb2gray(imread('boat/left.jpg')));
-    im2 = single(rgb2gray(imread('boat/right.jpg')));
-    figure(4)
-    imshow(im2,[])
+    im2 = single(rgb2gray(imread('boat/right.jpg'))); 
+    mode = 'affine';
 end
 
-im3 = NaN;
 %find matching points
 [f1,d1] = vl_sift(im1);
 [f2,d2] = vl_sift(im2);
-[matches, scores] = vl_ubcmatch(d1, d2) ;
+[matches, ~] = vl_ubcmatch(d1, d2) ;
 f1match=f1(:,matches(1,:));
 f2match=f2(:,matches(2,:));
 p1 = f1match(1:2,:);
 p2 = f2match(1:2,:);
 
 %perform RANSAC to find transformation
-[T, M] = RANSAC(1000,p1,p2);
-T;
-xdata=0;
-%transform the 2cnd image
-tt = maketform('affine',[M [0;0];0 0 1 ]);
-[B,xdata,ydata]=imtransform(im2,tt);
-xdata
-ydata
-figure(1)
-imshow(im1,[])
-figure(2)
-imshow(B,[]);
-size(B)
 
-%define new image size
-im3=zeros(size(im1,1),size(B,2)-floor(T(1)));
-T(2)
-ydata(1)
-shi=17%round(ydata)-round(T(2))
+A = RANSAC(5000,p1,p2,mode);
 
-im3(1:size(im1,1),1:size(im1,2))=im1;
-temp = zeros(size(im3));
-temp(shi:shi+size(B,1)-1,end-size(B,2)+1:end)=B;
-im3 = im3.*(temp==0) + temp;
-figure(3)
-imshow(im3,[])
-%return new image
+%make t-form for both first and second image
+tA = maketform(mode,A');
+tI = maketform(mode,eye(3));
 
+%find new image size
+[h,w] = size(im1);
+[h2,w2] = size(im2);
+newcorners = A*[1,w,1,w;1,1,h,h;1,1,1,1];
+minXY = min([newcorners [w2;h2;1]],[],2);
+maxXY = max([newcorners [w2;h2;1]],[],2);
+
+Xdata = [minXY(1), maxXY(1)];
+Ydata = [minXY(2), maxXY(2)];
+
+%transform both images to canvas and combine
+imt1 = imtransform(im1,tA,'Xdata',Xdata,'Ydata',Ydata,'FillValues',NaN);
+imt2 = imtransform(im2,tI,'Xdata',Xdata,'Ydata',Ydata,'FillValues',NaN);
+imshow(imt1,[]);
+[nh, nw] = size(imt1);
+size(imt1)
+size(imt2)
+im3 = nanmean([imt1(:),imt2(:)],2);
+im3 = reshape(im3,nh,nw);
+%imshow(im3,[]);
+end
 
