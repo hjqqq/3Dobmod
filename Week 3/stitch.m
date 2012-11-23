@@ -36,12 +36,12 @@ size(B)
 im3=zeros(size(im1,1),size(B,2)-floor(T(1)));
 T(2)
 ydata(1)
-shi=round(ydata)-round(T(2))
+shi=17%round(ydata)-round(T(2))
 
 im3(1:size(im1,1),1:size(im1,2))=im1;
 temp = zeros(size(im3));
 temp(shi:shi+size(B,1)-1,end-size(B,2)+1:end)=B;
-im3 = im3.*(~temp) + temp;
+im3 = im3.*(temp==0) + temp;
 figure(3)
 imshow(im3,[])
 %return new image
