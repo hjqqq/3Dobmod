@@ -1,8 +1,9 @@
-function im3 = stitch(im1,im2)
+function im3 = stitch(im1,im2,mode)
 
 if nargin<1
     im1 = single(rgb2gray(imread('boat/left.jpg')));
     im2 = single(rgb2gray(imread('boat/right.jpg')));
+    mode = 'affine';
 end
 
 %find matching points
@@ -15,12 +16,11 @@ p1 = f1match(1:2,:);
 p2 = f2match(1:2,:);
 
 %perform RANSAC to find transformation
-[T, M] = RANSAC(1000,p1,p2);
+A = RANSAC(5000,p1,p2,mode);
 %transform the 2cnd image
 
-A = [M,T;0,0,1];
-tA = maketform('affine',A');
-tI = maketform('affine',eye(3));
+tA = maketform(mode,A');
+tI = maketform(mode,eye(3));
 
 [h,w] = size(im1);
 [h2,w2] = size(im2);
