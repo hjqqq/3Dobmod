@@ -26,8 +26,10 @@ p1 = f1match(1:2,:);
 p2 = f2match(1:2,:);
 
 %perform RANSAC to find transformation
+g=0;
 
-A = RANSAC(5000,p1,p2,mode);
+[A,lr] = RANSAC(5000,p1,p2,mode);
+g=g+lr;
 
 %make t-form for both first and second image
 tA = maketform(mode,A');

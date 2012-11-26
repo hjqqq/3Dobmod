@@ -8,7 +8,7 @@
 %
 % OUTPUT
 % - TM: transformation matrix
-function bestTM = RANSAC(N,p1,p2,mode)
+function [bestTM,lastround] = RANSAC(N,p1,p2,mode)
 
 if nargin<4
     mode = 'affine';
@@ -29,8 +29,16 @@ bestTM = NaN;
 
 for round=1:N
     %determine transformation
-    TM=maakMat(p1,p2,npix,mode);
-    
+    try
+        TM=maakMat(p1,p2,npix,mode);
+    catch err
+        continue
+    end
+    %TM=T.tdata.T;
+%         if max(max(isnan(T.tdata.T)))==1
+%         disp('nan');
+%         continue
+%   end
     % determine number of inliers
     inliers = 0;
     LS=0;
@@ -46,14 +54,16 @@ for round=1:N
     end
     
     % if number of inliers is better update best transformation estimate
-    if inliers > bestInliers ||(inliers == bestInliers && LS < bestLS)
+    if inliers > bestInliers %||(inliers == bestInliers && LS < bestLS)
         bestInliers = inliers;
         bestLS = LS;
         bestTM = TM;
         display(['best number of inliers: ',num2str(inliers)])
+        lastround=round;
     end
 end
-
+lastround
+%% Mean of the inliers
 % MatT=[];
 % MatM=[];
 % bestIntin
@@ -90,6 +100,8 @@ function TM = maakMat(p1,p2,npix,mode)
         TM = [M,T;0,0,1];
     else %'projective'
         %construct linear system
+        %TM = maketform('projective', p1p', p2p');
+        
         A = zeros(8,8);
         A(1:3:8,3)=1;
         A(2:3:8,6)=1;
