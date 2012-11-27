@@ -4,6 +4,7 @@
 %INPUT
 %- im1: first image (in time) should be in black and white
 %- im2: second image (in time) should be in black and white
+%- sigma: how much you smooth the image
 %
 %OUTPUT
 %- F: vector of flows

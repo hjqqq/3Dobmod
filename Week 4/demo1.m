@@ -6,7 +6,7 @@ function demo1()
 clf();
 im1 = imread('synth1.pgm');
 im2 = imread('synth2.pgm');
-[F,ind] = flow(im1,im2);
+[F,ind] = flow(im1,im2,3);
 imshow(im1)
 hold on
 quiver(ind(:,:,1),ind(:,:,2),F(:,:,1),F(:,:,2),'m');
