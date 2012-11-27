@@ -9,13 +9,26 @@ function demo1()
 % 
 % pause()
 
-im1 = rgb2gray(imread('sphere1.ppm'));
-im2 = rgb2gray(imread('sphere2.ppm'));
-[F,ind] = flow(im1,im2);
+im1 = imread('sphere1.ppm');
+im2 = imread('sphere2.ppm');
+
+ig1 = rgb2gray(im1);
+ig2 = rgb2gray(im2);
+[F,ind] = flow(ig1,ig2,4);
 imshow(im1)
 hold on
 quiver(ind(:,:,2),ind(:,:,1),F(:,:,1),F(:,:,2),'m');
+f = getframe;
+im = frame2im(f);
+[imind,cm] = rgb2ind(im,256);
+imwrite(imind,cm,'test','gif', 'Loopcount',inf);
 
+imshow(im2)
+quiver(ind(:,:,2),ind(:,:,1),F(:,:,1),F(:,:,2),'m');
+f = getframe;
+im = frame2im(f);
+[imind,cm] = rgb2ind(im,256);
+imwrite(imind,cm,'test','gif','WriteMode','append');
 end
 
 

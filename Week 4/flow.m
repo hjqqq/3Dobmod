@@ -8,7 +8,7 @@
 %OUTPUT
 %- F: vector of flows
 %- ind: indexes of the flow vectors
-function [F,ind] = flow(im1,im2)
+function [F,ind] = flow(im1,im2,sigma)
 
 if nargin < 1
     im1 = imread('synth1.pgm');
@@ -24,8 +24,13 @@ ind = zeros(hDevide,wDevide,2);
 ind(:,:,1) = repmat((0:wDevide-1)',1,hDevide)*15+7.5;
 ind(:,:,2) = repmat((0:hDevide-1),wDevide,1)*15+7.5;
 
-Ix = conv2(im1,[-1,0,1],'same');
-Iy = conv2(im1,[-1,0,1]','same');
+G = gaussian(sigma);
+Gd = gaussianDer(G,sigma);
+Ix = conv2(G',conv2(Gd,im1));
+Iy = conv2(G,conv2(Gd',im1));
+
+%Ix = conv2(im1,[-1,0,1],'same');
+%Iy = conv2(im1,[-1,0,1]','same');
 It = im2-im1;
 
 F = zeros(hDevide,wDevide,2);
@@ -36,7 +41,7 @@ for i=0:hDevide-1
         A = [A1(:) , A2(:)];
         b = It(i*15+1:(i+1)*15,j*15+1:(j+1)*15);
         b = b(:);
-        v = inv(A'*A) * A' * double(b);
+        v = pinv(A'*A) * A' * double(b);
         F(i+1,j+1,:) = v;
     end
 end
