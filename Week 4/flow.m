@@ -4,11 +4,12 @@
 %INPUT
 %- im1: first image (in time) should be in black and white
 %- im2: second image (in time) should be in black and white
+%- sigma: how much you smooth the image
 %
 %OUTPUT
 %- F: vector of flows
 %- ind: indexes of the flow vectors
-function [F,ind] = flow(im1,im2)
+function [F,ind] = flow(im1,im2,sigma)
 
 im1 = double(im1);
 im2 = double(im2);
@@ -28,8 +29,7 @@ ind = zeros(hDevide,wDevide,2);
 ind(:,:,1) = repmat((0:wDevide-1)',1,hDevide)*15+7.5;
 ind(:,:,2) = repmat((0:hDevide-1),wDevide,1)*15+7.5;
 
-%Find image derivatives in x,y and t direction
-sigma =1;
+
 G = fspecial('gaussian',[1 2*ceil(3*sigma)+1],sigma);
 Gd = gaussianDer(G,sigma);
 Ix = conv2(im1,Gd,'same');
@@ -47,7 +47,6 @@ for i=0:hDevide-1
         % make b matrix consisting of derivatives in time
         b = It(i*15+1:(i+1)*15,j*15+1:(j+1)*15);
         b = b(:);
-        %find b
         v = pinv(A'*A) * A' * double(b);
         F(i+1,j+1,:) = v;
     end
