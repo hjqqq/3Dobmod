@@ -26,6 +26,8 @@ ig2 = rgb2gray(im2);
 imshow(im1)
 hold on
 quiver(ind(:,:,2),ind(:,:,1),F(:,:,1),F(:,:,2),'m');
+
+%building the gif file
 f = getframe;
 im = frame2im(f);
 [imind,cm] = rgb2ind(im,256);
