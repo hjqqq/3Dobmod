@@ -20,22 +20,37 @@ end
 %track points
 [pointsx,pointsy]=LKtracker(Points(1:2,:),Imf,1);
 
+size(pointsx)
+
 %original point locations
 pointsxo = Points(1:2:end,:);
 pointsyo = Points(2:2:end,:);
 
+size(pointsxo)
 % plot x location for first point (both true and tracked)
 clf();
-plot(pointsxo(:,1))
-title('x')
-hold on
-plot(pointsx(:,1),'r')
+% figure(2)
+% plot(pointsxo(:,1))
+% title('x')
+% hold on
+% plot(pointsx(:,1),'r')
+% 
+% % now for y
+% figure(3)
+% plot(pointsyo(:,1))
+% title('y')
+% hold on
+% plot(pointsy(:,1),'r')
 
-% now for y
-figure(2)
-plot(pointsyo(:,1))
-title('y')
-hold on
-plot(pointsy(:,1),'r')
+%least square
 
+eudis=sqrt((pointsx-pointsxo).^2+(pointsy-pointsyo).^2);
+LS=sum(eudis,2);
+for i=1:size(LS)
+   LLS(i)=sum(LS(1:i));
+end
+plot(LLS)
+axis([1 101 0 120000])
+xlabel('image #')
+ylabel('sum of LS-error')
 end
