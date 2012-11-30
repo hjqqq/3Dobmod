@@ -1,44 +1,46 @@
 %function demo1
-%Shows a demo of the flow function on two images.
+%Shows a demo of the flow function on two images. Also produces an animated
+%gif
 function demo1()
 
-%Show the flow in the synthesized image
+%% Show the flow in the synthesized image
 clf();
 im1 = imread('synth1.pgm');
 im2 = imread('synth2.pgm');
-[F,ind] = flow(im1,im2,3);
+[F,ind] = flow(im1,im2,1);
 imshow(im1)
 hold on
-quiver(ind(:,:,1),ind(:,:,2),F(:,:,1),F(:,:,2),'m');
+quiver(ind(:,:,1),ind(:,:,2),F(:,:,1),F(:,:,2),'b');
 
 %pause process
 display('Press any key to continue')
 pause()
-clf();
 
+%% Show the flow in the sphere image
+clf();
 im1 = imread('sphere1.ppm');
 im2 = imread('sphere2.ppm');
 
 ig1 = rgb2gray(im1);
-ig2 = rgb2gray(im2);
-[F,ind] = flow(ig1,ig2,4);
+ig2 = rgb2gray(im2); 
+[F,ind] = flow(ig1,ig2,1);
 
 imshow(im1)
 hold on
 quiver(ind(:,:,2),ind(:,:,1),F(:,:,1),F(:,:,2),'m');
 
-%building the gif file
+%% Produce animated gif of sphere
 f = getframe;
 im = frame2im(f);
 [imind,cm] = rgb2ind(im,256);
-imwrite(imind,cm,'test','gif', 'Loopcount',inf);
+imwrite(imind,cm,'sphere','gif', 'Loopcount',inf);
 
 imshow(im2)
 quiver(ind(:,:,2),ind(:,:,1),F(:,:,1),F(:,:,2),'m');
 f = getframe;
 im = frame2im(f);
 [imind,cm] = rgb2ind(im,256);
-imwrite(imind,cm,'test','gif','WriteMode','append');
+imwrite(imind,cm,'sphere','gif','WriteMode','append');
 end
 
 
