@@ -46,11 +46,11 @@ clf();
 
 eudis=sqrt((pointsx-pointsxo).^2+(pointsy-pointsyo).^2);
 LS=sum(eudis,2);
-for i=1:size(LS)
-   LLS(i)=sum(LS(1:i));
-end
-plot(LLS)
-axis([1 101 0 120000])
+% for i=1:size(LS)
+%    LLS(i)=sum(LS(1:i));
+% end
+plot(LS)
+axis([1 101 0 1800])
 xlabel('image #')
 ylabel('sum of LS-error')
 end
