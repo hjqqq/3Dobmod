@@ -35,7 +35,7 @@ for i = 1:size(p,2)
         b = It(y-7:y+7,x-7:x+7,num);
         b = b(:);
         v = pinv(A'*A) * A' * double(b);
-        pointsx(num+1,i) = v(1) + pointsx(num,i);
-        pointsy(num+1,i) = v(2) + pointsy(num,i);
+        pointsx(num+1,i) = pointsx(num,i)-v(1);
+        pointsy(num+1,i) = pointsy(num,i)-v(2);
     end
 end
