@@ -35,10 +35,10 @@ ind(:,:,2) = repmat((0:hDevide-1),wDevide,1)*15+7.5;
 
 %Find image derivatives
 G = fspecial('gaussian',[1 2*ceil(3*sigma)+1],sigma);
-Gd = gaussianDer(G,sigma)
+Gd = gaussianDer(G,sigma);
 
-Ix = conv2(im1,Gd,'same');
-Iy = conv2(im1,Gd','same');
+Ix = conv2(conv2(im1,Gd,'same'),G','same');
+Iy = conv2(conv2(im1,Gd','same'),G,'same');
 It = im2-im1;
 
 %For every patch find flow vector and store in F

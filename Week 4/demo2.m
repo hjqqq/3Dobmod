@@ -18,4 +18,6 @@ for num = 1:101;
 end
 
 
-LKtracker(Points(1:2,:),Imf,3);
+[pointsx,pointsy]=LKtracker(Points(1:2,:),Imf,1);
+
+end
