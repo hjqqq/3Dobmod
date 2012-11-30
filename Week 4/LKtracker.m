@@ -23,8 +23,11 @@ for i=1:size(im,3)-1
     It(:,:,i)=im(:,:,i+1)-im(:,:,i);
 end
 
-for i = 1:size(p,2)
-    for num = 1:size(im,3)-1
+% writerObj = VideoWriter('test.avi');
+% open(writerObj);
+
+for num = 1:size(im,3)-1 % iterating through images
+    for i = 1:size(p,2) % iterating throught points
         x = min(max(round(pointsx(num,i)),8),size(im,2)-7);
         y = min(max(round(pointsy(num,i)),8),size(im,1)-7);
         % make a matrix consisting of derivatives around the pixel location
@@ -38,4 +41,14 @@ for i = 1:size(p,2)
         pointsx(num+1,i) = pointsx(num,i)-v(1);
         pointsy(num+1,i) = pointsy(num,i)-v(2);
     end
+%     figure(1)
+%     imshow(im(:,:,num),[])
+%     hold on
+%     plot(pointsx(num,:),pointsy(num,:),'.y')
+%     frame = getframe;
+%     writeVideo(writerObj,frame);
+end
+%close(writerObj);
+
+
 end
