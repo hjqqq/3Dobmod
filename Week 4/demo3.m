@@ -18,6 +18,18 @@ M = U*(W^0.5);
 S = (W^0.5)*V';
 
 plot3(S(1,:),S(2,:),S(3,:),'.')
+
+Ai = M(1:2,:);
+L=pinv(Ai'*Ai);
+
+%C=chol(L,'lower');
+%M = M*C;
+%S = pinv(C)*S;
+
+% Ai = M(1:2,1:2);
+% L = pinv(Ai'*Ai)
+% Ai * L * Ai'
+% C = chol(L,'lower');
 % for num = 1:101;
 %     imageLoc = ['model house\frame' num2str(num, '%08d') '.jpg'];
 %     im = double(imread(imageLoc))/255;

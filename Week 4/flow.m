@@ -11,13 +11,17 @@
 %- ind: indexes of the flow vectors
 function [F,ind] = flow(im1,im2,sigma)
 
-im1 = double(im1);
-im2 = double(im2);
 % if no images are provided load standard images
 if nargin < 1
     im1 = imread('synth1.pgm');
     im2 = imread('synth2.pgm');
+    sigma = 1;
 end
+
+% convert images to double precision
+im1 = double(im1);
+im2 = double(im2);
+
 % devide regions
 [h,w] = size(im1);
 
@@ -29,7 +33,7 @@ ind = zeros(hDevide,wDevide,2);
 ind(:,:,1) = repmat((0:wDevide-1)',1,hDevide)*15+7.5;
 ind(:,:,2) = repmat((0:hDevide-1),wDevide,1)*15+7.5;
 
-
+%Find image derivatives
 G = fspecial('gaussian',[1 2*ceil(3*sigma)+1],sigma);
 Gd = gaussianDer(G,sigma);
 Ix = conv2(im1,Gd,'same');
