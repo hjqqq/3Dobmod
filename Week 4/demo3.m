@@ -14,13 +14,21 @@ U = U(:,1:3);
 W = W(1:3,1:3);
 V = V(:,1:3);
 
-M = U*(W^0.5)
-size(M)
-L=M'*M
-C=chol(L)
-M=M*C
+M = U*(W^0.5);
+size(M);
+for i=1:101
+    L=inv(M(i*2-1:i*2,:)'*M(i*2-1:i*2,:));
+    M(i*2-1:i*2,:)*L*M(i*2-1:i*2,:)';
+    try
+    C=chol(L)
+    catch
+    end
+end
+
+
+M=M*C;
 S = (W^0.5)*V';
-S=C^-1*S
+S=C^-1*S;
 
 plot3(S(1,:),S(2,:),S(3,:),'.')
 % for num = 1:101;
