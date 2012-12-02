@@ -12,7 +12,7 @@
 %     cameras i.e. images.
 %- S: The estimated 3-dimensional locations of the points (3x#points)
 function [M,S] = demo3(tracked)
-
+close all
 if nargin < 1
     tracked = false;
 end
@@ -52,7 +52,7 @@ S = pinv(C)*S;
 
 plot3(S(1,:),S(2,:),S(3,:),'.m');
 
-%% For our points
+%% For the tracked points with LKtracker
 
 load('Xpoints')
 load('Ypoints')
@@ -114,6 +114,4 @@ S = pinv(C)*S;
 hold on
 plot3(S(1,:),S(2,:),S(3,:),'.y');
 
-%show the result
-% hold on
-% plot3(S(1,:),S(2,:),S(3,:),'.y');
+end
