@@ -45,6 +45,7 @@ for num = 1:size(im,3)-1 % iterating through images
 %     imshow(im(:,:,num),[])
 %     hold on
 %     plot(pointsx(num,:),pointsy(num,:),'.y')
+%     plot(p(num*2-1,:),p(num*2,:),'.m')
 %     frame = getframe;
 %     writeVideo(writerObj,frame);
 end
