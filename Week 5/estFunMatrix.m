@@ -12,10 +12,11 @@
 function M = estFunMatrix(im1,im2)
     % Load images if not supplied
     if nargin < 1
-        im1 = imread('...');
-        im2 = imread('...');
+        im1 = imread('img/right.jpg');
+        im2 = imread('img/left.jpg');
     end
     
+    return
     % Find interest points in images and match them
     [x1,y1,a1,b1,c1, desc1] = ./extract_features -haraff -i img. png -sift
     [x2,y2,a2,b2,c2, desc2] = ./extract_features -haraff -i img. png -sift
