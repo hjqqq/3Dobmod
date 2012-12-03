@@ -1,3 +1,6 @@
+% the Lukas Kanade Tracker:
+% in every frame the image is showed with the tracked points that are shown
+% in yellow and the ground truth in magenta
 function [pointsx, pointsy] = LKtracker(p,im,sigma)
 
 %pre-alocate point locations and image derivatives
@@ -41,10 +44,11 @@ for num = 1:size(im,3)-1 % iterating through images
         pointsx(num+1,i) = pointsx(num,i)-v(1);
         pointsy(num+1,i) = pointsy(num,i)-v(2);
     end
-%     figure(1)
-%     imshow(im(:,:,num),[])
-%     hold on
-%     plot(pointsx(num,:),pointsy(num,:),'.y')
+    figure(1)
+    imshow(im(:,:,num),[])
+    hold on
+    plot(pointsx(num,:),pointsy(num,:),'.y') %tracked points
+    plot(p(num*2-1,:),p(num*2,:),'.m')  %ground truth
 %     frame = getframe;
 %     writeVideo(writerObj,frame);
 end

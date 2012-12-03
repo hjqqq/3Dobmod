@@ -1,5 +1,8 @@
-function demo2()
+% this function gives a demo of the Lucas Kanade tracker. The sum of the
+% euclidean distance between the tracked points and the groundtruth is
+% plotted for every frame.
 
+function demo2()
 %load points
 Points = importdata('model house\measurement_matrix.txt');
 
@@ -18,39 +21,22 @@ for num = 1:101;
 end
 
 %track points
-[pointsx,pointsy]=LKtracker(Points(1:2,:),Imf,1);
+[pointsx,pointsy]=LKtracker(Points,Imf,1);
 
-size(pointsx)
+save('Xpoints','pointsx')
+save('Ypoints','pointsy')
+
 
 %original point locations
 pointsxo = Points(1:2:end,:);
 pointsyo = Points(2:2:end,:);
 
-size(pointsxo)
-% plot x location for first point (both true and tracked)
-clf();
-% figure(2)
-% plot(pointsxo(:,1))
-% title('x')
-% hold on
-% plot(pointsx(:,1),'r')
-% 
-% % now for y
-% figure(3)
-% plot(pointsyo(:,1))
-% title('y')
-% hold on
-% plot(pointsy(:,1),'r')
 
-%least square
-
+%% euclidean distance per frame
+figure(2)
 eudis=sqrt((pointsx-pointsxo).^2+(pointsy-pointsyo).^2);
 LS=sum(eudis,2);
-% for i=1:size(LS)
-%    LLS(i)=sum(LS(1:i));
-% end
 plot(LS)
-axis([1 101 0 1800])
 xlabel('image #')
 ylabel('sum of LS-error')
 end
