@@ -16,10 +16,15 @@ function M = estFunMatrix(im1,im2)
         im2 = imread('img/left.jpg');
     end
     
+<<<<<<< HEAD
     return
     % Find interest points in images and match them
     [x1,y1,a1,b1,c1, desc1] = ./extract_features -haraff -i img. png -sift
     [x2,y2,a2,b2,c2, desc2] = ./extract_features -haraff -i img. png -sift
+=======
+    % Load interest points in images and match them
+    
+>>>>>>> 844e242b6ff7446aa76f554f3846576206e698e0
     [ matches , scores ] = vl_ubcmatch (desc1 , desc2);
     
     % Construct matrix A
