@@ -64,10 +64,21 @@ function F = estFunMatrix()
     F = T2'*F*T1;
     
     %Show epipolar lines
-    line = F*coor2(1,:)';
-    a=line(1); b=line(2); c=line(3);
-    x = [1,size(im1,2)];
-    y = -a/b*x-c/b;
-    plot(x,y)
+    colors = get(gca,'ColorOrder');
+    for i = 1:L
+        line = F'*coor2(i,:)';%shouldn't this be F*coor2(i,:)'
+        a=line(1); b=line(2); c=line(3);
+        x = [1,size(im1,2)];
+        y = -a/b*x-c/b;
+        plot(x,y,'Color',colors(mod(i-1,L-1)+1,:))
+    end
+    
+    for i = 1:L
+        line = F*coor1(i,:)';%and this be F'*coor1(i,:)' see pdf
+        a=line(1); b=line(2); c=line(3);
+        x = [1,size(im1,2)];
+        y = -a/b*x-c/b;
+        plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
+    end
     
 end
