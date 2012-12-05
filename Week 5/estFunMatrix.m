@@ -21,47 +21,64 @@ function F = estFunMatrix()
         data2 = importdata('extract_features/obj02_002.png.haraff.sift', ' ', 2);
         desc2 = data2.data(:,6:end);
         coor2 = data2.data(:,1:2);
+        N = 100 ; %amount of rounds used for RANSAC (prob. more)
     end
     
     % match interest points
     [ matches , scores ] = vl_ubcmatch (desc1' , desc2');
     coor1 = coor1(matches(1,:),:);
     coor2 = coor2(matches(2,:),:);
-    %select only the top L
+    totM = size(coor1)
+    coor1 = [coor1,ones(totM,1)];
+    coor2 = [coor2,ones(totM,1)];
+    
+    %% RANSAC
     L = 8;
-    [~,ind] = sort(scores,'descend');
-    coor1 = [coor1(ind([1,3,5:10]),:),ones(L,1)];
-    coor2 = [coor2(ind([1,3,5:10]),:),ones(L,1)];
-    %show matches
+    bestInliers = 0;
+    inti = [];
+    th = 2; %the threshold that the distance between points maybe
+    for round=1:N
+        %select only the top L of the permutated points
+        permutation = randperm(size(coor1,1));
+        p1p = coor1(permutation(1:L),:);
+        p2p = coor2(permutation(1:L),:);
+        
+        % this function creates the Fundamental Matrix out of 8 point
+        F=createF(p1p,p2p);
+        
+        inliers = 0;
+        for i=1:totM
+            Dis = SampsonDist(coor1(i,:),coor2(i,:),F);
+            if Dis < th
+                inliers = inliers +  1;
+                inti = [inti i];
+            end
+        end
+        
+        if inliers > bestInliers
+            bestInliers = inliers;
+            display(['best number of inliers: ',num2str(inliers),', found in round #',num2str(round)])
+        end
+    end
+
+    %[~,ind] = sort(scores,'descend');
+
+    %% show matches
     imshow([rgb2gray(im1),rgb2gray(im2)])
     hold on
-    plot([coor1(:,1),coor2(:,1)+size(im1,2)]',[coor1(:,2),coor2(:,2)]')
+    plot([coor1(inti,1),coor2(inti,1)+size(im1,2)]',[coor1(inti,2),coor2(inti,2)]')
     
-    %find the normalization
-    [coor1n,T1] = normalizePoints(coor1);
-    [coor2n,T2] = normalizePoints(coor2);
-      
-    x1 = coor1n(:,1);
-    x2 = coor2n(:,1);
-    y1 = coor1n(:,2);
-    y2 = coor2n(:,2);    
     
-    % Construct matrix A
-    A = [x1.*x2 x1.*y2 x1 y1.*x2 y1.*y2 y1 x2 y2 ones(length(x1),1)];
-  
-    % Find SVD of A
-    [U,D,V] = svd(A);
     
-    % find the fundamental matrix
-    F = reshape(V(:,end),3,3);
     
-    %make the fundamental matrix non-singular (i.e. det(F) = 0)
-    [Uf,Df,Vf] = svd(F);
-    Df(3,3)=0;
-    F = Uf*Df*Vf';
-    
-    %transform back
-    F = T2'*F*T1;
+%     %Test if the x2*F*x1'=0
+%     x1 = co1(:,1);
+%     x2 = co2(:,1);
+%     y1 = co1(:,2);
+%     y2 = co2(:,2);
+%     A = [x1.*x2 x1.*y2 x1 y1.*x2 y1.*y2 y1 x2 y2 ones(length(x1),1)];
+%     Fs= F(:);
+%     A*Fs;
     
     %Show epipolar lines
     colors = get(gca,'ColorOrder');
