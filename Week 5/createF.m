@@ -24,6 +24,6 @@ function F=createF(coor1,coor2)
     F = Uf*Df*Vf';
     
     %transform back
-    F = T2'*F*T1
+    F = T2'*F*T1;
     
 end
