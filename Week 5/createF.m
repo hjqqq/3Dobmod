@@ -13,7 +13,7 @@ function F=createF(coor1,coor2)
     A = [x1.*x2 x1.*y2 x1 y1.*x2 y1.*y2 y1 x2 y2 ones(length(x1),1)];
   
     % Find SVD of A
-    [U,D,V] = svd(A);
+    [~,~,V] = svd(A);
     
     % find the fundamental matrix
     F = reshape(V(:,end),3,3);
