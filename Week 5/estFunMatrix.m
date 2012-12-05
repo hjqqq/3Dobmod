@@ -9,6 +9,7 @@
 %OUTPUT
 %- M: The estimated fundamental transformation matrix
 function F = estFunMatrix()
+    close all
     % Load images if not supplied
     if nargin < 1
         im1 = imread('img/obj02_001.png');
@@ -21,7 +22,7 @@ function F = estFunMatrix()
         data2 = importdata('extract_features/obj02_002.png.haraff.sift', ' ', 2);
         desc2 = data2.data(:,6:end);
         coor2 = data2.data(:,1:2);
-        N = 100 ; %amount of rounds used for RANSAC (prob. more)
+        N = 500 ; %amount of rounds used for RANSAC (prob. more)
     end
     
     % match interest points
@@ -35,8 +36,8 @@ function F = estFunMatrix()
     %% RANSAC
     L = 8;
     bestInliers = 0;
-    inti = [];
-    th = 2; %the threshold that the distance between points maybe
+    bestInti = [];
+    th = 1; %the threshold that the distance between points maybe
     for round=1:N
         %select only the top L of the permutated points
         permutation = randperm(size(coor1,1));
@@ -45,7 +46,7 @@ function F = estFunMatrix()
         
         % this function creates the Fundamental Matrix out of 8 point
         F=createF(p1p,p2p);
-        
+        inti = [];
         inliers = 0;
         for i=1:totM
             Dis = SampsonDist(coor1(i,:),coor2(i,:),F);
@@ -57,6 +58,7 @@ function F = estFunMatrix()
         
         if inliers > bestInliers
             bestInliers = inliers;
+            bestInti = inti;
             display(['best number of inliers: ',num2str(inliers),', found in round #',num2str(round)])
         end
     end
@@ -66,7 +68,7 @@ function F = estFunMatrix()
     %% show matches
     imshow([rgb2gray(im1),rgb2gray(im2)])
     hold on
-    plot([coor1(inti,1),coor2(inti,1)+size(im1,2)]',[coor1(inti,2),coor2(inti,2)]')
+    plot([coor1(bestInti,1),coor2(bestInti,1)+size(im1,2)]',[coor1(bestInti,2),coor2(bestInti,2)]')
     
     
     
@@ -97,5 +99,6 @@ function F = estFunMatrix()
         y = -a/b*x-c/b;
         plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
     end
+
     
 end
