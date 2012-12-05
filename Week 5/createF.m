@@ -1,3 +1,15 @@
+%F=createF(coor1,coor2)
+%For matched coordinates coor1 and coor2 it finds the fundamental matrix F
+%Using the normalized eight point algorithm
+%
+%INPUT
+%- coor1: An nx3 matrix containing the homogeneous coordinates from the
+%         left image
+%- coor2: An nx3 matrix containing the homogeneous coordinates from the
+%         right image
+%
+%OUTPUT
+%- F: The fundamental matrix estimated from the matched coordinates
 function F=createF(coor1,coor2)
 
     %find the normalization
@@ -25,5 +37,4 @@ function F=createF(coor1,coor2)
     
     %transform back
     F = T2'*F*T1;
-    
 end
