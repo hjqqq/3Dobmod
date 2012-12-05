@@ -34,8 +34,8 @@ function F = estFunMatrix()
 	coor1 = [coor1(ind([1,3,5:10]),:),ones(L,1)];
     coor2 = [coor2(ind([1,3,5:10]),:),ones(L,1)];
     
-    co1 = [coor1 ones(size(coor1,1),1)];
-    co2 = [coor2 ones(size(coor2,1),1)];
+    co1 = coor1;
+    co2 = coor2;
     
 
     %show matches
@@ -43,31 +43,7 @@ function F = estFunMatrix()
     hold on
     plot([coor1(:,1),coor2(:,1)+size(im1,2)]',[coor1(:,2),coor2(:,2)]')
     
-    %find the normalization
-    [coor1n,T1] = normalizePoints(coor1);
-    [coor2n,T2] = normalizePoints(coor2);
-      
-    x1 = coor1n(:,1);
-    x2 = coor2n(:,1);
-    y1 = coor1n(:,2);
-    y2 = coor2n(:,2);    
-    
-    % Construct matrix A
-    A = [x1.*x2 x1.*y2 x1 y1.*x2 y1.*y2 y1 x2 y2 ones(length(x1),1)];
-  
-    % Find SVD of A
-    [U,D,V] = svd(A);
-    
-    % find the fundamental matrix
-    F = reshape(V(:,end),3,3);
-    
-    %make the fundamental matrix non-singular (i.e. det(F) = 0)
-    [Uf,Df,Vf] = svd(F);
-    Df(3,3)=0;
-    F = Uf*Df*Vf';
-    
-    %transform back
-    F = T2'*F*T1
+    F=createF(coor1,coor2);
     
     for i=1:size(co1,1)
         D = SampsonDist(co1(i,:),co2(i,:),F)
