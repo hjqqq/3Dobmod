@@ -30,8 +30,12 @@ function F = estFunMatrix()
     %select only the top L
     L = 8;
     [~,ind] = sort(scores,'descend');
-    coor1 = coor1(ind([1,3,5:10]),:);
+    coor1 = coor1(ind([1,3,5:10]),:)
     coor2 = coor2(ind([1,3,5:10]),:);
+    
+    co1 = [coor1 ones(size(coor1,1),1)];
+    co2 = [coor2 ones(size(coor2,1),1)];
+    
     %show matches
     imshow([rgb2gray(im1),rgb2gray(im2)])
     hold on
@@ -77,6 +81,20 @@ function F = estFunMatrix()
     F = Uf*Df*Vf';
     
     %transform back
-    F = T2'*F*T1;
+    F = T2'*F*T1
+    
+    for i=1:size(co1,1)
+        D = SampsonDist(co1(i,:),co2(i,:),F)
+    end
+    
+    
+    %Test if the x2*F*x1'=0
+    x1 = co1(:,1);
+    x2 = co2(:,1);
+    y1 = co1(:,2);
+    y2 = co2(:,2);
+    A = [x1.*x2 x1.*y2 x1 y1.*x2 y1.*y2 y1 x2 y2 ones(length(x1),1)];
+    Fs= F(:)
+    A*Fs
     
 end
