@@ -30,41 +30,27 @@ function F = estFunMatrix()
     %select only the top L
     L = 8;
     [~,ind] = sort(scores,'descend');
-    coor1 = coor1(ind([1,3,5:10]),:)
-    coor2 = coor2(ind([1,3,5:10]),:);
+    
+	coor1 = [coor1(ind([1,3,5:10]),:),ones(L,1)];
+    coor2 = [coor2(ind([1,3,5:10]),:),ones(L,1)];
     
     co1 = [coor1 ones(size(coor1,1),1)];
     co2 = [coor2 ones(size(coor2,1),1)];
     
+
     %show matches
     imshow([rgb2gray(im1),rgb2gray(im2)])
     hold on
     plot([coor1(:,1),coor2(:,1)+size(im1,2)]',[coor1(:,2),coor2(:,2)]')
     
     %find the normalization
-    m1 = mean(coor1);
-    m2 = mean(coor2);
-    d1 = sqrt(2) / mean(sqrt( (coor1(:,1)-m1(1)).^2 + (coor1(:,2)-m1(2)).^2 ));
-    d2 = sqrt(2) / mean(sqrt( (coor2(:,1)-m2(1)).^2 + (coor2(:,2)-m2(2)).^2 ));
-    T1 = [d1 0  -m1(1)*d1;
-          0  d1 -m1(2)*d1;
-          0  0   1];
-    T2 = [d2 0  -m2(1)*d2;
-          0  d2 -m2(2)*d2;
-          0  0   1];
-    
-    coor1 = [coor1,ones(L,1)];
-    coor2 = [coor2,ones(L,1)];
-    for i=1:L
-        coor1(i,:) = T1*coor1(i,:)';
-        coor2(i,:) = T2*coor2(i,:)';
-    end
+    [coor1n,T1] = normalizePoints(coor1);
+    [coor2n,T2] = normalizePoints(coor2);
       
-    x1 = coor1(:,1);
-    x2 = coor2(:,1);
-    y1 = coor1(:,2);
-    y2 = coor2(:,2);
-    
+    x1 = coor1n(:,1);
+    x2 = coor2n(:,1);
+    y1 = coor1n(:,2);
+    y2 = coor2n(:,2);    
     
     % Construct matrix A
     A = [x1.*x2 x1.*y2 x1 y1.*x2 y1.*y2 y1 x2 y2 ones(length(x1),1)];
@@ -96,5 +82,12 @@ function F = estFunMatrix()
     A = [x1.*x2 x1.*y2 x1 y1.*x2 y1.*y2 y1 x2 y2 ones(length(x1),1)];
     Fs= F(:)
     A*Fs
+    
+    %Show epipolar lines
+    line = F*coor2(1,:)';
+    a=line(1); b=line(2); c=line(3);
+    x = [1,size(im1,2)];
+    y = -a/b*x-c/b;
+    plot(x,y)
     
 end
