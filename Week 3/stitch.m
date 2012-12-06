@@ -54,6 +54,6 @@ size(imt1)
 size(imt2)
 im3 = nanmean([imt1(:),imt2(:)],2);
 im3 = reshape(im3,nh,nw);
-%imshow(im3,[]);
+imshow(im3,[]);
 end
 

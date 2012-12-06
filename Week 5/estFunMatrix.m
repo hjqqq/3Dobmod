@@ -34,7 +34,7 @@ function F = estFunMatrix()
     coor2 = [coor2,ones(totM,1)];
     
     %% RANSAC
-    L = 8;
+    L = 20;
     bestInliers = 0;
     bestInti = [];
     th = 1; %the threshold that the distance between points maybe
@@ -82,23 +82,23 @@ function F = estFunMatrix()
 %     Fs= F(:);
 %     A*Fs;
     
-    %Show epipolar lines
-    colors = get(gca,'ColorOrder');
-    for i = 1:L
-        line = F'*coor2(i,:)';%shouldn't this be F*coor2(i,:)'
-        a=line(1); b=line(2); c=line(3);
-        x = [1,size(im1,2)];
-        y = -a/b*x-c/b;
-        plot(x,y,'Color',colors(mod(i-1,L-1)+1,:))
-    end
-    
-    for i = 1:L
-        line = F*coor1(i,:)';%and this be F'*coor1(i,:)' see pdf
-        a=line(1); b=line(2); c=line(3);
-        x = [1,size(im1,2)];
-        y = -a/b*x-c/b;
-        plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
-    end
+%     %Show epipolar lines
+%     colors = get(gca,'ColorOrder');
+%     for i = 1:L
+%         line = F'*coor2(i,:)';%shouldn't this be F*coor2(i,:)'
+%         a=line(1); b=line(2); c=line(3);
+%         x = [1,size(im1,2)];
+%         y = -a/b*x-c/b;
+%         plot(x,y,'Color',colors(mod(i-1,L-1)+1,:))
+%     end
+%     
+%     for i = 1:L
+%         line = F*coor1(i,:)';%and this be F'*coor1(i,:)' see pdf
+%         a=line(1); b=line(2); c=line(3);
+%         x = [1,size(im1,2)];
+%         y = -a/b*x-c/b;
+%         plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
+%     end
 
     
 end
