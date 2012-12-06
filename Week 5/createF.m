@@ -1,3 +1,15 @@
+%F=createF(coor1,coor2)
+%For matched coordinates coor1 and coor2 it finds the fundamental matrix F
+%Using the normalized eight point algorithm
+%
+%INPUT
+%- coor1: An nx3 matrix containing the homogeneous coordinates from the
+%         left image
+%- coor2: An nx3 matrix containing the homogeneous coordinates from the
+%         right image
+%
+%OUTPUT
+%- F: The fundamental matrix estimated from the matched coordinates
 function F=createF(coor1,coor2)
 
     %find the normalization
@@ -13,7 +25,7 @@ function F=createF(coor1,coor2)
     A = [x1.*x2 x1.*y2 x1 y1.*x2 y1.*y2 y1 x2 y2 ones(length(x1),1)];
   
     % Find SVD of A
-    [U,D,V] = svd(A);
+    [~,~,V] = svd(A);
     
     % find the fundamental matrix
     F = reshape(V(:,end),3,3);
@@ -25,5 +37,4 @@ function F=createF(coor1,coor2)
     
     %transform back
     F = T2'*F*T1;
-    
 end
