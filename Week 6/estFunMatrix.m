@@ -12,7 +12,7 @@
 %
 %OUTPUT
 %- F: The estimated fundamental transformation matrix
-function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
+function [F,co2Best] = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     close all
     % Load images if not supplied
     if nargin < 1
@@ -43,7 +43,7 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     %% RANSAC
     L = 20;
     bestInliers = 0;
-    bestInti = []
+    bestInti = [];
     th = 1; %the threshold that the distance between points maybe
     for round=1:N
         %select only the top L of the permutated points
@@ -72,32 +72,34 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
             display(['best number of inliers: ',num2str(inliers),', found in round #',num2str(round)])
         end
     end
+    
+    co2Best = 
 
     %[~,ind] = sort(scores,'descend');
 
-    %% show matches, used for estimating F
-    imshow([rgb2gray(im1),rgb2gray(im2)])
-    hold on
-    plot([bestP1(:,1),bestP2(:,1)+size(im1,2)]',[bestP1(:,2),bestP2(:,2)]')
-    
+%     %% show matches, used for estimating F
+%     imshow([rgb2gray(im1),rgb2gray(im2)])
+%     hold on
+%     plot([bestP1(:,1),bestP2(:,1)+size(im1,2)]',[bestP1(:,2),bestP2(:,2)]')
+%     
 
-    %Show epipolar lines
-    colors = get(gca,'ColorOrder');
-    for i = 1:L
-        line = F'*bestP2(i,:)';%shouldn't this be F*coor2(i,:)'
-        a=line(1); b=line(2); c=line(3);
-        x = [1,size(im1,2)];
-        y = -a/b*x-c/b;
-        plot(x,y,'Color',colors(mod(i-1,L-1)+1,:))
-    end
-    
-    for i = 1:L
-        line = F*bestP1(i,:)';%and this be F'*coor1(i,:)' see pdf
-        a=line(1); b=line(2); c=line(3);
-        x = [1,size(im1,2)];
-        y = -a/b*x-c/b;
-        plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
-    end
+%     %Show epipolar lines
+%     colors = get(gca,'ColorOrder');
+%     for i = 1:L
+%         line = F'*bestP2(i,:)';%shouldn't this be F*coor2(i,:)'
+%         a=line(1); b=line(2); c=line(3);
+%         x = [1,size(im1,2)];
+%         y = -a/b*x-c/b;
+%         plot(x,y,'Color',colors(mod(i-1,L-1)+1,:))
+%     end
+%     
+%     for i = 1:L
+%         line = F*bestP1(i,:)';%and this be F'*coor1(i,:)' see pdf
+%         a=line(1); b=line(2); c=line(3);
+%         x = [1,size(im1,2)];
+%         y = -a/b*x-c/b;
+%         plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
+%     end
 
     
 end
