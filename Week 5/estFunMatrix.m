@@ -16,12 +16,14 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     close all
     % Load images if not supplied
     if nargin < 1
-        im1 = imread('img/obj02_001.png');
-        im2 = imread('img/obj02_002.png');
+        im  = load('im1');
+        im1 = im.im1;
+        im  = load('im2');
+        im2 = im.im2;
     
         dataLoc1 = 'extract_features/obj02_001.png.haraff.sift';
         dataLoc2 = 'extract_features/obj02_002.png.haraff.sift';
-        N = 500 ; %amount of rounds used for RANSAC (prob. more)
+        N = 1000 ; %amount of rounds used for RANSAC (prob. more)
     end
 
     % Load interest points in images
@@ -33,7 +35,7 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     coor2 = data2.data(:,1:2);
     
     % match interest points
-    [ matches , scores ] = vl_ubcmatch (desc1' , desc2')
+    [ matches , scores ] = vl_ubcmatch (desc1' , desc2');
     coor1 = coor1(matches(1,:),:);
     coor2 = coor2(matches(2,:),:);
     totM = size(coor1,1);
@@ -76,7 +78,7 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     %[~,ind] = sort(scores,'descend');
 
     %% show matches, used for estimating F
-    imshow([rgb2gray(im1),rgb2gray(im2)])
+    imshow([im1,im2])
     hold on
     plot([bestP1(:,1),bestP2(:,1)+size(im1,2)]',[bestP1(:,2),bestP2(:,2)]')
     
@@ -88,7 +90,7 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
         a=line(1); b=line(2); c=line(3);
         x = [1,size(im1,2)];
         y = -a/b*x-c/b;
-        plot(x,y,'Color',colors(mod(i-1,L-1)+1,:))
+        plot(x,y,'Color',colors(mod(i-1,8-1)+1,:))
     end
     
     for i = 1:L
@@ -96,7 +98,7 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
         a=line(1); b=line(2); c=line(3);
         x = [1,size(im1,2)];
         y = -a/b*x-c/b;
-        plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
+        plot(x+size(im1,2),y,'Color',colors(mod(i-1,8-1)+1,:))
     end
 
     
