@@ -6,21 +6,16 @@
 %INPUT
 %- dataLoc1: location of the pre-computed descriptors file for im1
 %- dataLoc2: location of the pre-computed descriptors file for im2
-%- im1: The first image
-%- im2: The second image
 %- N: The number of rounds RANSAC should perform
 %
 %OUTPUT
 %- F: The estimated fundamental transformation matrix
-function [F,co2Best] = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
+function [F,origFeatInd1,origFeatInd2] = estFunMatrix(dataLoc1,dataLoc2,N)
     close all
     % Load images if not supplied
     if nargin < 1
-        im1 = imread('img/obj02_001.png');
-        im2 = imread('img/obj02_002.png');
-    
-        dataLoc1 = 'extract_features/obj02_001.png.haraff.sift';
-        dataLoc2 = 'extract_features/obj02_002.png.haraff.sift';
+        dataLoc1 = 'HarSift/obj02_001.png.haraff.sift';
+        dataLoc2 = 'HarSift/obj02_002.png.haraff.sift';
         N = 500 ; %amount of rounds used for RANSAC (prob. more)
     end
 
@@ -33,7 +28,7 @@ function [F,co2Best] = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     coor2 = data2.data(:,1:2);
     
     % match interest points
-    [ matches , scores ] = vl_ubcmatch (desc1' , desc2')
+    [ matches , scores ] = vl_ubcmatch (desc1' , desc2');
     coor1 = coor1(matches(1,:),:);
     coor2 = coor2(matches(2,:),:);
     totM = size(coor1,1);
@@ -73,33 +68,7 @@ function [F,co2Best] = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
         end
     end
     
-    co2Best = 
-
-    %[~,ind] = sort(scores,'descend');
-
-%     %% show matches, used for estimating F
-%     imshow([rgb2gray(im1),rgb2gray(im2)])
-%     hold on
-%     plot([bestP1(:,1),bestP2(:,1)+size(im1,2)]',[bestP1(:,2),bestP2(:,2)]')
-%     
-
-%     %Show epipolar lines
-%     colors = get(gca,'ColorOrder');
-%     for i = 1:L
-%         line = F'*bestP2(i,:)';%shouldn't this be F*coor2(i,:)'
-%         a=line(1); b=line(2); c=line(3);
-%         x = [1,size(im1,2)];
-%         y = -a/b*x-c/b;
-%         plot(x,y,'Color',colors(mod(i-1,L-1)+1,:))
-%     end
-%     
-%     for i = 1:L
-%         line = F*bestP1(i,:)';%and this be F'*coor1(i,:)' see pdf
-%         a=line(1); b=line(2); c=line(3);
-%         x = [1,size(im1,2)];
-%         y = -a/b*x-c/b;
-%         plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
-%     end
-
-    
+    %match points to their original feature indexes
+    origFeatInd1 = matches(1,bestInti);
+    origFeatInd2 = matches(2,bestInti);
 end
