@@ -1,0 +1,11 @@
+function buildPVmat()
+
+% load the salient points with descriptors for 16 images
+% maybe, load only the matches between two images (also 16) Make them in
+% advance
+if nargin<1
+    
+end
+
+
+    
