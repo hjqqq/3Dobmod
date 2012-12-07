@@ -18,9 +18,20 @@ end
 % the Point-view matrix, every row represents an image and every column a
 % point. On the rows the images are from 1 to 16
 % also filling it for the first time
-%PVmat=zeros(16
 pViewMat = zeros(16,size(featInd1{1},2));
 pViewMat(1:2,:) = 1;
+
+
+for i = 1:size(featInd1{2},2)
+    ind = find(featInd2{1}==featInd1{2}(i),1,'first');
+    if isempty(ind)
+        newColumn = zeros(16,1);
+        newColumn(2:3) = 1;
+        pViewMat = [pViewMat,newColumn];
+    else
+        pViewMat(3,ind) = 1;
+    end
+end
 
 %contains the descpriptor of the points (same indexes as the PVmat columns)
 %ik weet nog niet of dat nodig is, misschien handig om te checken of
