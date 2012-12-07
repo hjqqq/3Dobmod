@@ -83,7 +83,6 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     imshow([im1,im2])
     hold on
     plot([bestP1(1:7,1),bestP2(1:7,1)+size(im1,2)]',[bestP1(1:7,2),bestP2(1:7,2)]','o')
-    
 
     %Show epipolar lines
     colors = get(gca,'ColorOrder');

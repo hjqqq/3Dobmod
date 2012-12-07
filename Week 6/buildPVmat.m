@@ -1,4 +1,4 @@
-function buildPVmat()
+function pViewMat=buildPVmat()
 
 
 % load the descriptors of the images
