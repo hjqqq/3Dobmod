@@ -21,15 +21,22 @@ end
 pViewMat = zeros(16,size(featInd1{1},2));
 pViewMat(1:2,:) = 1;
 
-
-for i = 1:size(featInd1{2},2)
-    ind = find(featInd2{1}==featInd1{2}(i),1,'first');
-    if isempty(ind)
-        newColumn = zeros(16,1);
-        newColumn(2:3) = 1;
-        pViewMat = [pViewMat,newColumn];
-    else
-        pViewMat(3,ind) = 1;
+newInd = 1:size(featInd1{2},2);
+%zeros(size(featInd1{2},2),1);
+for m = 2:3
+    oldInd = newInd;
+    newInd = zeros(size(featInd1{m},2),1);
+    for i = 1:size(featInd1{m},2)
+        ind = find(featInd2{m-1}==featInd1{m}(i),1,'first');
+        if isempty(ind)
+            newColumn = zeros(16,1);
+            newColumn(m:m+1) = 1;
+            pViewMat = [pViewMat,newColumn];
+            newInd(i) = size(pViewMat,2);
+        else
+            pViewMat(3,oldInd(ind)) = 1;
+            newInd(i) = oldInd(ind);
+        end
     end
 end
 

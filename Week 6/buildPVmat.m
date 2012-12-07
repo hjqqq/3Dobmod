@@ -8,10 +8,10 @@ featInd2 = cell(1,16);
 for i = 1:16
     dataLoc{i} = ['HarSift/obj02_',num2str(i,'%03d'),'.png.haraff.sift'];
 end
-N = 500; %run RANSAC N times
+N = 200; %run RANSAC N times
 
 % calculate the matches between the two images
-for i = 1:3 % later tot 16
+for i = 1:16 % later tot 16
     [~,featInd1{i},featInd2{i}]=estFunMatrix(dataLoc{i},dataLoc{mod(i,16)+1},N);
 end
 
@@ -21,15 +21,22 @@ end
 pViewMat = zeros(16,size(featInd1{1},2));
 pViewMat(1:2,:) = 1;
 
-
-for i = 1:size(featInd1{2},2)
-    ind = find(featInd2{1}==featInd1{2}(i),1,'first');
-    if isempty(ind)
-        newColumn = zeros(16,1);
-        newColumn(2:3) = 1;
-        pViewMat = [pViewMat,newColumn];
-    else
-        pViewMat(3,ind) = 1;
+newInd = 1:size(featInd1{1},2);
+%zeros(size(featInd1{2},2),1);
+for m = 2:15
+    oldInd = newInd;
+    newInd = zeros(size(featInd1{m},2),1);
+    for i = 1:size(featInd1{m},2)
+        ind = find(featInd2{m-1}==featInd1{m}(i),1,'first');
+        if isempty(ind)
+            newColumn = zeros(16,1);
+            newColumn(m:m+1) = 1;
+            pViewMat = [pViewMat,newColumn];
+            newInd(i) = size(pViewMat,2);
+        else
+            pViewMat(m+1,oldInd(ind)) = 1;
+            newInd(i) = oldInd(ind);
+        end
     end
 end
 
