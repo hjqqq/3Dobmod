@@ -75,17 +75,19 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
         end
     end
 
+    %Aproximate F from inliers.
+    F = createF(coor1(bestInti,:),coor2(bestInti,:));
     %[~,ind] = sort(scores,'descend');
 
     %% show matches, used for estimating F
     imshow([im1,im2])
     hold on
-    plot([bestP1(:,1),bestP2(:,1)+size(im1,2)]',[bestP1(:,2),bestP2(:,2)]')
+    plot([bestP1(1:7,1),bestP2(1:7,1)+size(im1,2)]',[bestP1(1:7,2),bestP2(1:7,2)]','o')
     
 
     %Show epipolar lines
     colors = get(gca,'ColorOrder');
-    for i = 1:L
+    for i = 1:7
         line = F'*bestP2(i,:)';%shouldn't this be F*coor2(i,:)'
         a=line(1); b=line(2); c=line(3);
         x = [1,size(im1,2)];
@@ -93,7 +95,7 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
         plot(x,y,'Color',colors(mod(i-1,8-1)+1,:))
     end
     
-    for i = 1:L
+    for i = 1:7
         line = F*bestP1(i,:)';%and this be F'*coor1(i,:)' see pdf
         a=line(1); b=line(2); c=line(3);
         x = [1,size(im1,2)];
