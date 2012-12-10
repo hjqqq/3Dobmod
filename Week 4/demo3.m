@@ -109,9 +109,9 @@ L = lsqnonlin(@myfun,L0);
 
 C = chol(L,'lower');
 M = M*C;
-S = pinv(C)*S;
+S2 = pinv(C)*S;
 
 hold on
-plot3(S(1,:),S(2,:),S(3,:),'.y');
+plot3(S2(1,:),S2(2,:),S2(3,:),'.y');
 
 end

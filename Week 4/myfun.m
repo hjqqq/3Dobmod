@@ -21,3 +21,5 @@ for i = 1:size(M,1)/2
     D = Ai*L*Ai' - eye(2);
     Dif(i,:) = D(:);
 end
+
+Dif = sum(Dif);
