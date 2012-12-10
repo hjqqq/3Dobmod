@@ -10,7 +10,13 @@
 %
 %OUTPUT
 %- F: The estimated fundamental transformation matrix
-function [F,origFeatInd1,origFeatInd2] = estFunMatrix(dataLoc1,dataLoc2,hesLoc1,hesLoc2,N)
+%- origFeatInd1: The original feature indexes of the first image found to
+%                match between images
+%- origFeatInd2: The original feature indexes of the second image found to 
+%                match between images
+%- featCoor1:    The coordinates of the matched features in the first image
+%- featCoor2:    The coordinates of the matched features in the second image
+function [F,origFeatInd1,origFeatInd2,featCoor1,featCoor2] = estFunMatrix(dataLoc1,dataLoc2,hesLoc1,hesLoc2,N)
     close all
     % Load images if not supplied
     if nargin < 1
@@ -74,4 +80,6 @@ function [F,origFeatInd1,origFeatInd2] = estFunMatrix(dataLoc1,dataLoc2,hesLoc1,
     %match points to their original feature indexes
     origFeatInd1 = matches(1,bestInti);
     origFeatInd2 = matches(2,bestInti);
+    featCoor1 = coor1(bestInti,:);
+    featCoor2 = coor2(bestInti,:);
 end

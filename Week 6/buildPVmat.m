@@ -5,6 +5,8 @@ function pViewMat=buildPVmat()
 dataLoc = cell(1,16);
 featInd1 = cell(1,16);
 featInd2 = cell(1,16);
+featCoor1 = cell(1,16);
+featCoor2 = cell(1,16);
 for i = 1:16
     dataLoc{i} = ['HarSift/obj02_',num2str(i,'%03d'),'.png.haraff.sift'];
     HesLoc{i} = ['HesSift/obj02_',num2str(i,'%03d'),'.png.hesaff.sift'];
@@ -12,8 +14,8 @@ end
 N = 200; %run RANSAC N times
 
 % calculate the matches between the two images
-for i = 1:16 % later tot 16
-    [~,featInd1{i},featInd2{i}]=estFunMatrix(dataLoc{i},dataLoc{mod(i,16)+1},HesLoc{i},HesLoc{mod(i,16)+1},N);
+for i = 1:4 % later tot 16
+    [~,featInd1{i},featInd2{i},featCoor1{i},featCoor2{i}]=estFunMatrix(dataLoc{i},dataLoc{mod(i,16)+1},HesLoc{i},HesLoc{mod(i,16)+1},N);
 end
 
 % the Point-view matrix, every row represents an image and every column a
@@ -24,7 +26,7 @@ pViewMat(1:2,:) = 1;
 
 newInd = 1:size(featInd1{1},2);
 %zeros(size(featInd1{2},2),1);
-for m = 2:15
+for m = 2:3
     oldInd = newInd;
     newInd = zeros(size(featInd1{m},2),1);
     for i = 1:size(featInd1{m},2)
