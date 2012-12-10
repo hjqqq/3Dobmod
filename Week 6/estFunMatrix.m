@@ -1,6 +1,7 @@
-%function M = estFunMatrix()
+%function [F,origFeatInd1,origFeatInd2,featCoor1,featCoor2] =
+%                         estFunMatrix(dataLoc1,dataLoc2,hesLoc1,hesLoc2,N)
 %Estimates the Fundamental matrix between two images. Using points found by
-%the Harris/Hessian Affine implementation and matching them with SIFT from
+%the Harris+Hessian Affine implementation and matching them with SIFT from
 %the vl_feat toolbox.
 %
 %INPUT
@@ -16,7 +17,7 @@
 %                match between images
 %- featCoor1:    The coordinates of the matched features in the first image
 %- featCoor2:    The coordinates of the matched features in the second image
-function [F,origFeatInd1,origFeatInd2,featCoor1,featCoor2] = estFunMatrix(dataLoc1,dataLoc2,N)
+function [F,origFeatInd1,origFeatInd2,featCoor1,featCoor2] = estFunMatrix(dataLoc1,dataLoc2,hesLoc1,hesLoc2,N)
     close all
     % Load images if not supplied
     if nargin < 1
@@ -26,12 +27,15 @@ function [F,origFeatInd1,origFeatInd2,featCoor1,featCoor2] = estFunMatrix(dataLo
     end
 
     % Load interest points in images
-    data1 = importdata(dataLoc1, ' ', 2);
-    desc1 = data1.data(:,6:end);
-    coor1 = data1.data(:,1:2);
-    data2 = importdata(dataLoc2, ' ', 2);
-    desc2 = data2.data(:,6:end);
-    coor2 = data2.data(:,1:2);
+    data1a = importdata(dataLoc1, ' ', 2);
+    data1b = importdata(hesLoc1, ' ',2);
+    desc1 = [data1a.data(:,6:end);data1b.data(:,6:end)];
+    coor1 = [data1a.data(:,1:2);data1b.data(:,1:2)];
+    
+    data2a = importdata(dataLoc2, ' ', 2);
+    data2b = importdata(hesLoc2, ' ',2);
+    desc2 = [data2a.data(:,6:end);data2b.data(:,6:end)];
+    coor2 = [data2a.data(:,1:2);data2b.data(:,1:2)];
     
     % match interest points
     [ matches , scores ] = vl_ubcmatch (desc1' , desc2');

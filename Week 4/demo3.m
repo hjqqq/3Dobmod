@@ -50,7 +50,7 @@ C = chol(L,'lower');
 M = M*C;
 S = pinv(C)*S;
 
-plot3(S(1,:),S(2,:),S(3,:),'.m');
+%plot3(S(1,:),S(2,:),S(3,:),'.m');
 
 %% For the tracked points with LKtracker
 
@@ -98,6 +98,15 @@ V = V(:,1:3);
 
 M = U*(W^0.5);
 S = (W^0.5)*V';
+
+%plot3(S(1,:),S(2,:),S(3,:),'.m');
+
+[X,Y] = meshgrid(S(1,:),S(2,:));
+Z = griddata(S(1,:),S(2,:),S(3,:), X, Y);
+figure;
+surf(X,Y,Z);
+surf(S(1,:),S(2,:),S(3,:))
+
 
 %solve for affine ambiguity using non-linear least squares
 
