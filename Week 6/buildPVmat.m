@@ -13,7 +13,7 @@ end
 N = 200; %run RANSAC N times
 
 % calculate the matches between the two images
-for i = 1:4 % later tot 16
+for i = 1:16 % later tot 16
     [~,featInd1{i},featInd2{i},featCoor1{i},featCoor2{i}] = ...
         estFunMatrix(dataLoc{i},dataLoc{mod(i,16)+1},N);
 end
@@ -26,7 +26,7 @@ pViewMat(1:2,:) = 1;
 
 newInd = 1:size(featInd1{1},2);
 %zeros(size(featInd1{2},2),1);
-for m = 2:3
+for m = 2:15
     oldInd = newInd;
     newInd = zeros(size(featInd1{m},2),1);
     for i = 1:size(featInd1{m},2)
