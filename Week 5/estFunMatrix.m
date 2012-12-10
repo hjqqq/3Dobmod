@@ -82,25 +82,6 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     hold on
     plot([coor1(bestInti,1),coor2(bestInti,1)+size(im1,2)]',[coor1(bestInti,2),coor2(bestInti,2)]')
 
-<<<<<<< HEAD
-%     %Show epipolar lines
-%     colors = get(gca,'ColorOrder');
-%     for i = 1:L
-%         line = F'*bestP2(i,:)';%shouldn't this be F*coor2(i,:)'
-%         a=line(1); b=line(2); c=line(3);
-%         x = [1,size(im1,2)];
-%         y = -a/b*x-c/b;
-%         plot(x,y,'Color',colors(mod(i-1,L-1)+1,:))
-%     end
-%     
-%     for i = 1:L
-%         line = F*bestP1(i,:)';%and this be F'*coor1(i,:)' see pdf
-%         a=line(1); b=line(2); c=line(3);
-%         x = [1,size(im1,2)];
-%         y = -a/b*x-c/b;
-%         plot(x+size(im1,2),y,'Color',colors(mod(i-1,L-1)+1,:))
-%     end
-=======
     %Show epipolar lines
     colors = get(gca,'ColorOrder');
     for i = 1:L
@@ -118,7 +99,6 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
         y = -a/b*x-c/b;
         plot(x+size(im1,2),y,'Color',colors(mod(i-1,8-1)+1,:))
     end
->>>>>>> 4f9989763ff03c66b42a94b661b2be54e1048031
 
     
 end
