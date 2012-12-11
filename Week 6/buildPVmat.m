@@ -1,4 +1,4 @@
-function pViewMat=buildPVmat(Load)
+function [pViewMat,coorMat]=buildPVmat(Load)
 
 if nargin<1
     Load = 1;
@@ -24,6 +24,7 @@ if Load
     load('featCoor1','featCoor1');
     load('featCoor2','featCoor2');
 else
+    %if you get an error here please load the feat toolbox
     for i = 1:16 % later tot 16
         [~,featInd1{i},featInd2{i},featCoor1{i},featCoor2{i}]= ...
             estFunMatrix(dataLoc{i},dataLoc{mod(i,16)+1},hesLoc{i},hesLoc{mod(i,16)+1},N);
