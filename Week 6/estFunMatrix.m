@@ -29,13 +29,13 @@ function [F,origFeatInd1,origFeatInd2,featCoor1,featCoor2] = estFunMatrix(dataLo
     % Load interest points in images
     data1a = importdata(dataLoc1, ' ', 2);
     data1b = importdata(hesLoc1, ' ',2);
-    desc1 = [data1a.data(:,6:end);data1b.data(:,6:end)];
-    coor1 = [data1a.data(:,1:2);data1b.data(:,1:2)];
+    desc1 = [data1a.data(:,6:end)];%;data1b.data(:,6:end)];
+    coor1 = [data1a.data(:,1:2)];%;data1b.data(:,1:2)];
     
     data2a = importdata(dataLoc2, ' ', 2);
     data2b = importdata(hesLoc2, ' ',2);
-    desc2 = [data2a.data(:,6:end);data2b.data(:,6:end)];
-    coor2 = [data2a.data(:,1:2);data2b.data(:,1:2)];
+    desc2 = [data2a.data(:,6:end)];%;data2b.data(:,6:end)];
+    coor2 = [data2a.data(:,1:2)];%;data2b.data(:,1:2)];
     
     % match interest points
     [ matches , scores ] = vl_ubcmatch (desc1' , desc2');
