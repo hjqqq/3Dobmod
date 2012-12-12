@@ -1,19 +1,40 @@
-function [pViewMat,coorMat]=buildPVmat(Load)
+function [pViewMat,coorMat]=buildPVmat(Load,type)
 
 if nargin<1
     Load = 1;
+    type='h'
 end
 
-% load the descriptors of the images
-dataLoc = cell(1,16);
-hesLoc = cell(1,16);
-featInd1 = cell(1,16);
-featInd2 = cell(1,16);
-featCoor1 = cell(1,16);
-featCoor2 = cell(1,16);
-for i = 1:16
-    dataLoc{i} = ['HarSift/obj02_',num2str(i,'%03d'),'.png.haraff.sift'];
-    hesLoc{i} = ['HesSift/obj02_',num2str(i,'%03d'),'.png.hesaff.sift'];
+% load the descriptors of the images house
+if type=='h'
+    am=19;
+    dataLoc = cell(1,am);
+    hesLoc = cell(1,am);
+    featInd1 = cell(1,am);
+    featInd2 = cell(1,am);
+    featCoor1 = cell(1,am);
+    featCoor2 = cell(1,am);
+    for i = 1:am
+        dataLoc{i} = ['house/8ADT',num2str(8585+i),'.png.haraff.sift'];
+        hesLoc{i} = ['house/8ADT',num2str(8585+i),'.png.hesaff.sift'];
+    end
+end
+
+
+
+% load the descriptors of the images BEAR
+if type=='b'
+    am=16;
+    dataLoc = cell(1,am);
+    hesLoc = cell(1,am);
+    featInd1 = cell(1,am);
+    featInd2 = cell(1,am);
+    featCoor1 = cell(1,am);
+    featCoor2 = cell(1,am);
+    for i = 1:am
+        dataLoc{i} = ['HarSift/obj02_',num2str(i,'%03d'),'.png.haraff.sift'];
+        hesLoc{i} = ['HesSift/obj02_',num2str(i,'%03d'),'.png.hesaff.sift'];
+    end
 end
 N = 200; %run RANSAC N times
 
