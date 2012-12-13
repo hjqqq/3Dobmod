@@ -45,7 +45,7 @@ function F = estFunMatrix(dataLoc1,dataLoc2,im1,im2,N)
     %% RANSAC
     L = 20;
     bestInliers = 0;
-    bestInti = []
+    bestInti = [];
     th = 1; %the threshold that the distance between points maybe
     for round=1:N
         %select only the top L of the permutated points

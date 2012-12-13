@@ -1,4 +1,4 @@
-function pViewMat=buildPVmat(Load)
+function [pViewMat,coorMat] =buildPVmat(Load)
 
 if nargin<1
     Load = 1;
