@@ -2,7 +2,7 @@ function [pViewMat,coorMat]=buildPVmat(Load,type)
 close all
 if nargin<1
     Load = 1;
-    type='h'
+    type='b'
 end
 
 % load the descriptors of the images house
