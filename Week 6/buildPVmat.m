@@ -2,11 +2,12 @@ function [pViewMat,coorMat]=buildPVmat(Load,type)
 close all
 if nargin<1
     Load = 1;
-    type='b'
+    type='b';
 end
 
 % load the descriptors of the images house
 if type=='h'
+    display('loading house pictures')
     am=19;
     dataLoc = cell(1,am);
     hesLoc = cell(1,am);
@@ -24,6 +25,7 @@ end
 
 % load the descriptors of the images BEAR
 if type=='b'
+    display('loading bear pictures')
     am=16;
     dataLoc = cell(1,am);
     hesLoc = cell(1,am);
