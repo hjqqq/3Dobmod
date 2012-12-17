@@ -3,8 +3,6 @@
 % pointclouds.
 function [mat,locX,locY,indRechts,indLinks]=switCols(mat,locX,locY)
 
-size(mat)
-size(locX)
 
 prevInd=1;
 indRechts=zeros(14,1);
