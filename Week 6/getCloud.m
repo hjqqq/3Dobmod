@@ -17,20 +17,21 @@ ind=find(sum(PVmat,1)>2);
 
                                 
 %Load images
+am=16
 im = cell(1,am);
 for i = 1:am
 im{i} = imread(['Teddy\obj02_',num2str(i,'%03d'),'.png']);
 end
                                 
-for i = 2:4
+for i = 3:5
     figure(i)
     imshow(im{i})
     hold on;
-    plot(coX(i,400),coY(i,400),'ro');
+    plot(smallX(i,550),smallY(i,550),'ro');
 end
                                 
-for i=1:13
-    dodo=indRechts-indLinks+1;
+for i=2:2
+    dodo=indRechts(i)-indLinks(i)+1;
     % get the first block and translate the Points to the mean
     Points=zeros(6,indRechts(i)-indLinks(i)+1); %32 is 2*cameras
     mat=smallPV(:,indLinks(i):indRechts(i)+1);
@@ -71,15 +72,15 @@ for i=1:13
     plot(maX(1,1:3),maY(1,1:3),'or')
     
 %     %solve for affine ambiguity
-%     A1 = M(1:2,:);
-%     L0=pinv(A1'*A1);
-%     save('M','M')
-%     
-%     L = lsqnonlin(@myfun,L0);
-% 
-%     C = chol(L,'lower');
-%     M = M*C;
-%     S = pinv(C)*S;
+    A1 = M(1:2,:);
+    L0=pinv(A1'*A1);
+    save('M','M')
+    
+    L = lsqnonlin(@myfun,L0);
+
+    C = chol(L,'lower');
+    M = M*C;
+    S = pinv(C)*S;
 
 
     
