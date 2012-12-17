@@ -1,35 +1,64 @@
-function [pViewMat,coorMat]=buildPVmat(Load);
+function [pViewMat,coorMat]=buildPVmat(Load)
+
 close all
 if nargin<1
     Load = 1;
+    type='b';
+end
+
+% load the descriptors of the images house
+if type=='h'
+    display('loading house pictures')
+    am=19;
+    dataLoc = cell(1,am);
+    hesLoc = cell(1,am);
+    featInd1H = cell(1,am);
+    featInd2H = cell(1,am);
+    featCoor1H = cell(1,am);
+    featCoor2H = cell(1,am);
+    for i = 1:am
+        dataLoc{i} = ['house/8ADT',num2str(8585+i),'.png.haraff.sift'];
+        hesLoc{i} = ['house/8ADT',num2str(8585+i),'.png.hesaff.sift'];
+    end
 end
 
 
 
 % load the descriptors of the images BEAR
-am=16;
-dataLoc = cell(1,am);
-hesLoc = cell(1,am);
-featInd1 = cell(1,am);
-featInd2 = cell(1,am);
-featCoor1 = cell(1,am);
-featCoor2 = cell(1,am);
-for i = 1:am
-    dataLoc{i} = ['Teddy/HarSift/obj02_',num2str(i,'%03d'),'.png.haraff.sift'];
-    hesLoc{i} = ['Teddy/HesSift/obj02_',num2str(i,'%03d'),'.png.hesaff.sift'];
+if type=='b'
+    display('loading bear pictures')
+    am=16;
+    dataLoc = cell(1,am);
+    hesLoc = cell(1,am);
+    featInd1 = cell(1,am);
+    featInd2 = cell(1,am);
+    featCoor1 = cell(1,am);
+    featCoor2 = cell(1,am);
+    for i = 1:am
+        dataLoc{i} = ['HarSift/obj02_',num2str(i,'%03d'),'.png.haraff.sift'];
+        hesLoc{i} = ['HesSift/obj02_',num2str(i,'%03d'),'.png.hesaff.sift'];
+    end
 end
 N = 200; %run RANSAC N times
 
 % calculate the matches between the two images
 if Load
-    load('Teddy/featInd1','featInd1');
-    load('Teddy/featInd2','featInd2');
-    load('Teddy/featCoor1','featCoor1');
-    load('Teddy/featCoor2','featCoor2');
+    if type=='b'
+    load('featInd1','featInd1');
+    load('featInd2','featInd2');
+    load('featCoor1','featCoor1');
+    load('featCoor2','featCoor2');
+    end
+    if type=='h'
+	load('featInd1H','featInd1H');
+    load('featInd2H','featInd2H');
+    load('featCoor1H','featCoor1H');
+    load('featCoor2H','featCoor2H');
+    end
 else
     %if you get an error here please load the feat toolbox
     for i = 1:19 % later tot 16
-        [~,featInd1{i},featInd2{i},featCoor1{i},featCoor2{i}]= ...
+        [~,featInd1H{i},featInd2H{i},featCoor1H{i},featCoor2H{i}]= ...
             estFunMatrix(dataLoc{i},dataLoc{mod(i,16)+1},hesLoc{i},hesLoc{mod(i,16)+1},N);
     end
  end
@@ -37,6 +66,13 @@ else
 % the Point-view matrix, every row represents an image and every column a
 % point. On the rows the images are from 1 to 16
 % also filling it for the first time
+if type=='h'
+    featCoor1=featCoor1H;
+    featCoor2=featCoor2H;
+    featInd1=featInd1H;
+    featInd2=featInd2H;
+end
+
 pViewMat = zeros(am,size(featInd1{1},2));
 pViewMat(1:2,:) = 1;
 coorMat = zeros(am,2*size(featInd1{1},2));
@@ -78,10 +114,17 @@ end
 
 %Load images
 im = cell(1,am);
+if type=='b'
 for i = 1:am
-im{i} = imread(['Teddy\obj02_',num2str(i,'%03d'),'.png']);
+im{i} = imread(['img\obj02_',num2str(i,'%03d'),'.png']);
+end
 end
 
+if type=='h'
+for i = 1:am
+    im{i} = imread(['house\8ADT',num2str(8585+i),'.png']);
+end 
+end
 
 %show some of the images with matched point connected in images
 n=13;
