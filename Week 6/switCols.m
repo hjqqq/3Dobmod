@@ -25,7 +25,6 @@ for i=1:size(mat,1)-3
     a=[tempMat(:,ind3) tempMat(:,ind4) delMat];
     x=[tempX(:,ind3) tempX(:,ind4) tempX(:,indI)];
     y=[tempY(:,ind3) tempY(:,ind4) tempY(:,indI)];
-    imshow(a)
     
     
     mat(:,prevInd+1:(prevInd-1+IndFstZero(1)-1))=a;
