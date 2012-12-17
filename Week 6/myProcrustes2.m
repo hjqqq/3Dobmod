@@ -3,7 +3,9 @@ function [d,Z,transform] = myProcrustes2(X,Y)
     k = size(X,1);
     mX = mean(X);
     mY = mean(Y);
-    transform.t = mX - mY;
+    oX = X;
+    oY = Y;
+    transform.t = -mY;
     
     X = X - repmat(mX,k,1);
     Y = Y - repmat(mY,k,1);
@@ -19,9 +21,12 @@ function [d,Z,transform] = myProcrustes2(X,Y)
     [U,~,V] = svd(Y'*X);
     transform.R = U*V';
     
+    transform.t = transform.s*transform.t*transform.R;
+    
     for i = 1:k
-        Y(i,:) = transform.R*Y(i,:)';
+        oY(i,:) = transform.s*oY(i,:)*transform.R+transform.t;
     end
-    Z = Y;
-    d = 0;
+    Z = oY;
+    d = sqrt(sum(sum((oX-Z).^2)));
+    
 end
