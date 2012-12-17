@@ -21,11 +21,11 @@ transformation.c = t;
 sX = sqrt(sum(sum((X-repmat(mX,k,1)).^2))/k);
 sY = sqrt(sum(sum((tY-repmat(mX,k,1)).^2))/k);
 
-s = sX/sY;
+s = 1;%sX/sY;
 
 stY = (tY-repmat(mX,k,1))*s+repmat(mX,k,1);
 
-d = sqrt(sum(sum((X-stY).^2)));tran
+d = sqrt(sum(sum((X-stY).^2)));
 display(['distance after scaling is: ' ,num2str(d)])
 
 transformation.b = s;
