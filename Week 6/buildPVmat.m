@@ -1,4 +1,4 @@
-function [pViewMat,coorMat]=buildPVmat(Load)
+function [pViewMat,coorMat]=buildPVmat(Load);
 close all
 if nargin<1
     Load = 1;
@@ -86,11 +86,20 @@ end
 %show some of the images with matched point connected in images
 n=13;
 ind=find(sum(pViewMat,1)>2);
-for i = 1:sum(pViewMat(:,ind(n)))
+P=pViewMat(:,ind);
+coX=coorMat(:,1:2:end);
+coX=coX(:,ind);
+coY=coorMat(:,2:2:end);
+coY=coY(:,ind);
+for i = 2:4
     figure(i)
     imshow(im{i})
     hold on;
-    plot(coorMat(i,ind(n)*2-1),coorMat(i,ind(n)*2),'ro');
+    plot(coX(i,400),coY(i,400),'ro');
+end
+
+for i=1:size(pViewMat,1)
+    sum(P(i,:))
 end
 
 end
