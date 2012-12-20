@@ -1,4 +1,5 @@
 function [pViewMat,coorMat]=buildPVmat(Load)
+type='b';
 
 close all
 if nargin<1
@@ -35,8 +36,8 @@ if type=='b'
     featCoor1 = cell(1,am);
     featCoor2 = cell(1,am);
     for i = 1:am
-        dataLoc{i} = ['HarSift/obj02_',num2str(i,'%03d'),'.png.haraff.sift'];
-        hesLoc{i} = ['HesSift/obj02_',num2str(i,'%03d'),'.png.hesaff.sift'];
+        dataLoc{i} = ['Teddy/HarSift/obj02_',num2str(i,'%03d'),'.png.haraff.sift'];
+        hesLoc{i} = ['Teddy/HesSift/obj02_',num2str(i,'%03d'),'.png.hesaff.sift'];
     end
 end
 N = 200; %run RANSAC N times
@@ -44,10 +45,10 @@ N = 200; %run RANSAC N times
 % calculate the matches between the two images
 if Load
     if type=='b'
-    load('featInd1','featInd1');
-    load('featInd2','featInd2');
-    load('featCoor1','featCoor1');
-    load('featCoor2','featCoor2');
+    load('Teddy/featInd1','featInd1');
+    load('Teddy/featInd2','featInd2');
+    load('Teddy/featCoor1','featCoor1');
+    load('Teddy/featCoor2','featCoor2');
     end
     if type=='h'
 	load('featInd1H','featInd1H');
@@ -57,7 +58,7 @@ if Load
     end
 else
     %if you get an error here please load the feat toolbox
-    for i = 1:19 % later tot 16
+    for i = 1:16 % later tot 16
         [~,featInd1H{i},featInd2H{i},featCoor1H{i},featCoor2H{i}]= ...
             estFunMatrix(dataLoc{i},dataLoc{mod(i,16)+1},hesLoc{i},hesLoc{mod(i,16)+1},N);
     end
@@ -116,7 +117,7 @@ end
 im = cell(1,am);
 if type=='b'
 for i = 1:am
-im{i} = imread(['img\obj02_',num2str(i,'%03d'),'.png']);
+im{i} = imread(['Teddy/obj02_',num2str(i,'%03d'),'.png']);
 end
 end
 
