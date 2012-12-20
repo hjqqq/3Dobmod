@@ -57,6 +57,18 @@ for i=1:13
 %     hold on
 %     plot(maX(1,1:3),maY(1,1:3),'or')
     
+%     %solve for affine ambiguity
+    A1 = M(1:2,:);
+    L0=pinv(A1'*A1);
+    save('M','M')
+    
+%     L = lsqnonlin(@myfun,L0);
+    L = fminunc(@myfun,L0);
+    C = chol(L,'lower');
+    M = M*C;
+    S = pinv(C)*S;
+
+    
     if i == 1
         pointcloud = S;
     else
@@ -69,16 +81,6 @@ for i=1:13
             pointcloud = [pointcloud,newpoint'];
         end
     end
-%     %solve for affine ambiguity
-    A1 = M(1:2,:);
-    L0=pinv(A1'*A1);
-    save('M','M')
-    
-    L = lsqnonlin(@myfun,L0);
-    C = chol(L,'lower');
-    M = M*C;
-    S = pinv(C)*S;
-
 % figure(3)
 % plot3(S(1,1:b),S(2,1:b),S(3,1:b),'xm');
 % hold on

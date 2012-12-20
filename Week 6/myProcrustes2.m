@@ -5,7 +5,7 @@ function [d,Z,transform] = myProcrustes2(X,Y)
     mY = mean(Y);
     oX = X;
     oY = Y;
-    transform.t = -mY;
+    transform.t = mX - mY;
     
     X = X - repmat(mX,k,1);
     Y = Y - repmat(mY,k,1);
