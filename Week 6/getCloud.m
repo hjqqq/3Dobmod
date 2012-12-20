@@ -16,6 +16,7 @@ ind=find(sum(PVmat,1)>2);
                                     ,xLoc(:,ind),yLoc(:,ind));
 
                                 
+
 for i=1:13
     dodo=indRechts-indLinks+1;
     % get the first block and translate the Points to the mean
@@ -62,9 +63,9 @@ for i=1:13
         X = pointcloud(:,indLinks(i):indRechts(i-1));
         noMatches = indRechts(i-1)-indLinks(i)+1;
         Y = S(:,1:noMatches);
-        [~,~,T] = procrustes(X',Y');
+        [~,T] = myProcrustes3(X',Y');
         for j = noMatches+1:size(S,2)
-            newpoint = T.b*S(:,j)'*T.T + T.c(1,:);
+            newpoint = T.s*S(:,j)'*T.R + T.T(1,:);
             pointcloud = [pointcloud,newpoint'];
         end
     end
@@ -74,7 +75,6 @@ for i=1:13
     save('M','M')
     
     L = lsqnonlin(@myfun,L0);
-
     C = chol(L,'lower');
     M = M*C;
     S = pinv(C)*S;
