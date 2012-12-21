@@ -11,11 +11,9 @@ cameras = zeros(size(PV.pvMat,1)*2,3);
 mP = zeros(size(PV.pvMat,1)*2,1);
 
 for i=1:14
+    display(['iteration: ',num2str(i)])
     % get the first block and translate the Points to the mean
     Points=zeros(6,PV.indRechts(i)-PV.indLinks(i)+1); %32 is 2*cameras
-    mat=PV.pvMat(:,PV.indLinks(i):PV.indRechts(i));
-    maX=PV.xLoc(:,PV.indLinks(i):PV.indRechts(i));
-    maY=PV.yLoc(:,PV.indLinks(i):PV.indRechts(i));
     
     [~,noPoints] = size(Points);
     Points(1:2:end,:)=PV.xLoc(i:i+2,PV.indLinks(i):PV.indRechts(i));
@@ -32,27 +30,17 @@ for i=1:14
 
     M = U*(W^0.5);
     S = (W^0.5)*V';
-  
-%     img= imread(['Teddy\obj02_',num2str(i,'%03d'),'.png']);
-%     figure(2)
-%     imshow(img)
-%     hold on
-%     plot(maX(1,1:3),maY(1,1:3),'or')
     
 %     %solve for affine ambiguity
-%     A1 = M(1:2,:);
-%     L0=pinv(A1'*A1);
-%     save('M','M')
-%     
-% 
-%     L = lsqnonlin(@myfun,L0);
-%     C = chol(L,'lower');
-%     M = M*C;
-%     S = pinv(C)*S;
-  
-%     lsqnonlin(@bundleAdjustment,PX)
-%     PX = M*S+repmat(mP,1,noPoints);
-%     
+    A1 = M(1:2,:);
+    L0=pinv(A1'*A1);
+    save('M','M')
+    
+
+    L = lsqnonlin(@myfun,L0);
+    C = chol(L,'lower');
+    M = M*C;
+    S = pinv(C)*S;
     
     if i == 1
         pointcloud = S;
@@ -74,27 +62,11 @@ for i=1:14
         mP(i*2+3:i*2+4)= meanPoints(5:6);
     end
     
-%     CAM = cameras(1:i*2+4,:);
+%     CAM = cameras(1:i*2+4,:)
+%     CAMS = lsqnonlin(@bundleAdjustmentCam,CAM(:));
+%     cameras(1:i*2+4,:) = reshape(CAMS,i*2+4,3);
 %     PX0 = [CAM(:);pointcloud(:)];
 %     PX = lsqnonlin(@bundleAdjustment,PX0);
-%     
-% figure(3)
-% plot3(S(1,1:b),S(2,1:b),S(3,1:b),'xm');
-% hold on
-% plot3(S(1,1:3),S(2,1:3),S(3,1:3),'.b');
-    
-%     if i==2
-%         for j=1:3
-%         img= imread(['Teddy\obj02_',num2str(j+1,'%03d'),'.png']);
-%         figure(j)
-%         imshow(img)
-%         hold on
-%         plot(smallX(j+1:j+3,indLinks(i):indRechts(i)),smallY(j+1:j+3,...
-%             indLinks(i):indRechts(i)),'ro')
-%         hold off
-%         end
-%     end
-    %plot3(S(1,1:dodo),S(2,1:dodo),S(3,1:dodo),'.m');
 
 end
 

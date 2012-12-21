@@ -32,7 +32,7 @@ for ii = 1:2
                 color(:,:,1) = c(1,:);
                 color(:,:,2) = c(2,:);
                 color(:,:,3) = c(3,:);
-                if size(PC1,2)>5
+                if size(PC1,2)>4
                     CH = convhulln(PC1');
                     trisurf(CH,PC1(1,:),PC1(2,:),PC1(3,:),'FaceColor',...
                         'interp','Cdata',color,'CDataMapping','scaled')
