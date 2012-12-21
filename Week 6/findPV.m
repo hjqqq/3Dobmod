@@ -62,22 +62,22 @@ pvMat = pViewMat(:,ind);
 xLoc = xLoc(:,ind);
 yLoc = yLoc(:,ind);
 
-display(size(xLoc,2))
-ind=[];
-for i=1:size(xLoc,2)
-    a=xLoc(:,i);
-    for j=i+1:size(xLoc,2)-1
-        b=xLoc(:,j);
-        c=a-b;
-        if sum(c)==0
-            ind=[ind j];
-            break
-        end
-    end
-end  
-pvMat(:,ind)=[];
-xLoc(:,ind)=[];
-yLoc(:,ind)=[];
+% display(size(xLoc,2))
+% ind=[];
+% for i=1:size(xLoc,2)
+%     a=xLoc(:,i);
+%     for j=i+1:size(xLoc,2)-1
+%         b=xLoc(:,j);
+%         c=a-b;
+%         if sum(c)==0
+%             ind=[ind j];
+%             break
+%         end
+%     end
+% end  
+% pvMat(:,ind)=[];
+% xLoc(:,ind)=[];
+% yLoc(:,ind)=[];
 
 %get the colors for the coordinates
 colors = getColors(xLoc,yLoc,pvMat);
@@ -95,7 +95,7 @@ PV.indRechts=indRechts;
 PV.colors=colors;
 
 display('save the struct');
-save('teddy/PV','PV');
+save('Teddy/PV','PV');
 
 %show it some matches
 im1=imread('Teddy/obj02_001.png');

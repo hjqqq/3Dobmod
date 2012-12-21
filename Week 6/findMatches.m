@@ -25,7 +25,7 @@ for i = 1:am
     hesLoc{i} = ['Teddy/HesSift/obj02_',num2str(i,'%03d'),'.png.hesaff.sift'];
 end
 
-N = 200; %run RANSAC N times
+N = 500; %run RANSAC N times
 
 display('creating the matches')
 for i = 1:am % later tot 16

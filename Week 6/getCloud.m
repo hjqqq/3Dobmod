@@ -1,12 +1,11 @@
 function getCloud
 close all
 
+clear PV
 % this is loading the patchview matrix and the coordinates
-load('Teddy/pvMat')
-load('Teddy/coma')
 load('Teddy/PV')
 
-global PV mP
+% global PV mP
 
 %pre-allocation of camera matrix and mean vector
 cameras = zeros(size(PV.pvMat,1)*2,3);
@@ -78,7 +77,7 @@ for i=1:14
 %     CAM = cameras(1:i*2+4,:);
 %     PX0 = [CAM(:);pointcloud(:)];
 %     PX = lsqnonlin(@bundleAdjustment,PX0);
-    
+%     
 % figure(3)
 % plot3(S(1,1:b),S(2,1:b),S(3,1:b),'xm');
 % hold on
