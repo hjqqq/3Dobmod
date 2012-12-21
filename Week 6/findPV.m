@@ -1,7 +1,8 @@
 % This function creates the PointViewMatrix
 % There are several steps involved:
 % STEP1: Fill the matrix
-% STEP2: Make the matrix perfect step form
+% STEP2: Get double points out of the matrix
+% STEP3: Make the matrix perfect step form
 function findPV(featInd1,featInd2,featCoor1,featCoor2)
 
 % loading the matches
@@ -57,9 +58,35 @@ xLoc=coorMat(:,1:2:end);
 yLoc=coorMat(:,2:2:end);
 ind=find(sum(pViewMat,1)>2);
 
-[pvMat,xLoc,yLoc,indRechts,indLinks]=switCols(pViewMat(:,ind)...
-                                    ,xLoc(:,ind),yLoc(:,ind));
+pvMat = pViewMat(:,ind);
+xLoc = xLoc(:,ind);
+yLoc = yLoc(:,ind);
 
+display(size(xLoc,2))
+ind=[];
+for i=1:size(xLoc,2)
+    a=xLoc(:,i);
+    for j=i+1:size(xLoc,2)-1
+        b=xLoc(:,j);
+        c=a-b;
+        if sum(c)==0
+            ind=[ind j];
+            break
+        end
+    end
+end  
+pvMat(:,ind)=[];
+xLoc(:,ind)=[];
+yLoc(:,ind)=[];
+
+
+
+
+
+%% STEP3
+[pvMat,xLoc,yLoc,indRechts,indLinks]=switCols(pvMat,xLoc,yLoc);
+
+%% Store it and plot it
 PV.pvMat=pvMat;
 PV.xLoc=xLoc;
 PV.yLoc=yLoc;
