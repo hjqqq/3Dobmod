@@ -60,19 +60,24 @@ ind=find(sum(pViewMat,1)>2);
 [pvMat,xLoc,yLoc,indRechts,indLinks]=switCols(pViewMat(:,ind)...
                                     ,xLoc(:,ind),yLoc(:,ind));
 
+%get the colors for the coordinates
+colors = getColors(smallX,smallY,smallPV);
+save('colors','colors');        
+                                
 PV.pvMat=pvMat;
 PV.xLoc=xLoc;
 PV.yLoc=yLoc;
 PV.indLinks=indLinks;
 PV.indRechts=indRechts;
+PV.colors=colors;
 
 display('save the struct');
-save('PV','PV');
+save('teddy/PV','PV');
 
 %show it some matches
 im1=imread('Teddy/obj02_001.png');
 im2=imread('Teddy/obj02_002.png');
-imshow([im1,im2])
+imshow([im2,im1])
 hold on
 plot([PV.xLoc(1,1:7)',PV.xLoc(1,1:7)'+size(im1,2)]',[PV.yLoc(1,1:7)',PV.yLoc(1,1:7)']','-')
 end

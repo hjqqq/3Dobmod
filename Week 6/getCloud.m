@@ -4,32 +4,24 @@ close all
 % this is loading the patchview matrix and the coordinates
 load('Teddy/pvMat')
 load('Teddy/coma')
+load('Teddy/PV')
 
-global smallPV smallX smallY mP
+global PV mP
 
-% making the matrix smaller
-xLoc=CoMa(:,1:2:end);
-yLoc=CoMa(:,2:2:end);
-ind=find(sum(PVmat,1)>2);
-
-[smallPV,smallX,smallY,indRechts,indLinks]=switCols(PVmat(:,ind)...
-                                    ,xLoc(:,ind),yLoc(:,ind));
-% colors = getColors(smallX,smallY,smallPV);
-% save('colors','colors');
-
-cameras = zeros(size(smallPV,1)*2,3);
-mP = zeros(size(smallPV,1)*2,1);
+%pre-allocation of camera matrix and mean vector
+cameras = zeros(size(PV.pvMat,1)*2,3);
+mP = zeros(size(PV.pvMat,1)*2,1);
 
 for i=1:14
     % get the first block and translate the Points to the mean
-    Points=zeros(6,indRechts(i)-indLinks(i)+1); %32 is 2*cameras
-    mat=smallPV(:,indLinks(i):indRechts(i));
-    maX=smallX(:,indLinks(i):indRechts(i));
-    maY=smallY(:,indLinks(i):indRechts(i));
+    Points=zeros(6,PV.indRechts(i)-PV.indLinks(i)+1); %32 is 2*cameras
+    mat=PV.pvMat(:,PV.indLinks(i):PV.indRechts(i));
+    maX=PV.xLoc(:,PV.indLinks(i):PV.indRechts(i));
+    maY=PV.yLoc(:,PV.indLinks(i):PV.indRechts(i));
     
     [~,noPoints] = size(Points);
-    Points(1:2:end,:)=smallX(i:i+2,indLinks(i):indRechts(i));
-    Points(2:2:end,:)=smallY(i:i+2,indLinks(i):indRechts(i));
+    Points(1:2:end,:)=PV.xLoc(i:i+2,PV.indLinks(i):PV.indRechts(i));
+    Points(2:2:end,:)=PV.xLoc(i:i+2,PV.indLinks(i):PV.indRechts(i));
     meanPoints = mean(Points,2);
     Points = Points - repmat(meanPoints,1,noPoints);
 
@@ -68,8 +60,8 @@ for i=1:14
         cameras(1:6,:) = M;
         mP(1:6) = meanPoints;
     else
-        X = pointcloud(:,indLinks(i):indRechts(i-1));
-        noMatches = indRechts(i-1)-indLinks(i)+1;
+        X = pointcloud(:,PV.indLinks(i):PV.indRechts(i-1));
+        noMatches = PV.indRechts(i-1)-PV.indLinks(i)+1;
         Y = S(:,1:noMatches);
         [~,T] = myProcrustes3(X',Y');
 %         [~,~,T2] = procrustes(X',Y');
@@ -108,7 +100,7 @@ for i=1:14
 end
 
 PC=pointcloud;
-save('PC','PC')
+save('Teddy/PC','PC')
 % %Bundle adjustment
 % PX0 = [cameras(:);pointcloud(:)];
 % PX = lsqnonlin(@bundleAdjustment,PX0);

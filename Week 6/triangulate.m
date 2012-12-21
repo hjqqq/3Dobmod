@@ -1,15 +1,14 @@
+%From a stored pointcloud and colors show the model of the teddybear
 function triangulate()
 
-load('PC')
-load('colors')
+load('Teddy/PC')
+load('Teddy/PV')
+colors = PV.colors;
 k = 7;
 
 Max = max(PC,[],2);
 Min = min(PC,[],2);
 Dif = (Max-Min)/k;
-D1 = Min(1):Dif(1):Max(1);
-D2 = Min(2):Dif(2):Max(2);
-D3 = Min(3):Dif(3):Max(3);
 
 for ii = 1:2
     if ii == 1
