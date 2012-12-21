@@ -22,4 +22,4 @@ for i = 1:size(M,1)/2
     Dif(i,:) = D(:);
 end
 
-Dif = sum(Dif);
+Dif = sum(sum(Dif.^2));

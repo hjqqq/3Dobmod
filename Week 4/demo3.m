@@ -12,7 +12,7 @@
 %     cameras i.e. images.
 %- S: The estimated 3-dimensional locations of the points (3x#points)
 function [M,S] = demo3(tracked)
-close all
+% close all
 if nargin < 1
     tracked = false;
 end
@@ -40,16 +40,17 @@ S = (W^0.5)*V';
 
 
 %solve for affine ambiguity
-A1 = M(1:2,:);
-L0=pinv(A1'*A1);
-save('M','M')
-
-L = lsqnonlin(@myfun,L0);
-
-C = chol(L,'lower');
-M = M*C;
-S = pinv(C)*S;
-
+% A1 = M(1:2,:);
+% L0=pinv(A1'*A1);
+% save('M','M')
+% 
+% L = lsqnonlin(@myfun,L0);
+% 
+% C = chol(L,'lower');
+% M = M*C;
+% S = pinv(C)*S;
+S=S*10
+hold on
 plot3(S(1,:),S(2,:),S(3,:),'.m');
 
 %% For the tracked points with LKtracker

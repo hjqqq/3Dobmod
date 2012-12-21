@@ -25,10 +25,10 @@ function [Z,transform]=myProcrustes3(X,Y)
     R=transform.R;
     transform.T=-repmat((s*mY*R-mX),k,1);
 
-    Z=s*Yt*R-repmat((s*mY*R-mX),k,1)
-    
-    figure(2)
-     plot(Xt(:,1),Xt(:,2),'r-', Yt(:,1),Yt(:,2),'b-', Z(:,1),Z(:,2),'b:');
+    Z=s*Yt*R-repmat((s*mY*R-mX),k,1);
+%     
+%     figure(2)
+%      plot(Xt(:,1),Xt(:,2),'r-', Yt(:,1),Yt(:,2),'b-', Z(:,1),Z(:,2),'b:');
 end
      %axis([-1 3 -1.5 2.5])
     

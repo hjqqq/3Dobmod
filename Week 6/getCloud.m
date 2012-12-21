@@ -16,22 +16,9 @@ ind=find(sum(PVmat,1)>2);
                                     ,xLoc(:,ind),yLoc(:,ind));
 
                                 
-%Load images
-am=16
-im = cell(1,am);
-for i = 1:am
-im{i} = imread(['Teddy\obj02_',num2str(i,'%03d'),'.png']);
-end
-                                
-for i = 3:5
-    figure(i)
-    imshow(im{i})
-    hold on;
-    plot(smallX(i,550),smallY(i,550),'ro');
-end
-                                
-for i=2:2
-    dodo=indRechts(i)-indLinks(i)+1;
+
+for i=1:13
+    dodo=indRechts-indLinks+1;
     % get the first block and translate the Points to the mean
     Points=zeros(6,indRechts(i)-indLinks(i)+1); %32 is 2*cameras
     mat=smallPV(:,indLinks(i):indRechts(i)+1);
@@ -58,31 +45,46 @@ for i=2:2
     M = U*(W^0.5);
     S = (W^0.5)*V';
     [~,b]=size(S)
-    figure(1)
-    plot3(S(1,1:b),S(2,1:b),S(3,1:b),'xm');
-    hold on
-    plot3(S(1,1:3),S(2,1:3),S(3,1:3),'.b');
+%     figure(1)
+%     plot3(S(1,1:b),S(2,1:b),S(3,1:b),'xm');
+%     hold on
+%     plot3(S(1,1:3),S(2,1:3),S(3,1:3),'.b');
 
     
-    
-    img= imread(['Teddy\obj02_',num2str(i,'%03d'),'.png']);
-    figure(2)
-    imshow(img)
-    hold on
-    plot(maX(1,1:3),maY(1,1:3),'or')
+%     img= imread(['Teddy\obj02_',num2str(i,'%03d'),'.png']);
+%     figure(2)
+%     imshow(img)
+%     hold on
+%     plot(maX(1,1:3),maY(1,1:3),'or')
     
 %     %solve for affine ambiguity
     A1 = M(1:2,:);
     L0=pinv(A1'*A1);
     save('M','M')
     
-    L = lsqnonlin(@myfun,L0);
-
+%     L = lsqnonlin(@myfun,L0);
+    L = fminunc(@myfun,L0);
     C = chol(L,'lower');
     M = M*C;
     S = pinv(C)*S;
 
-
+    
+    if i == 1
+        pointcloud = S;
+    else
+        X = pointcloud(:,indLinks(i):indRechts(i-1));
+        noMatches = indRechts(i-1)-indLinks(i)+1;
+        Y = S(:,1:noMatches);
+        [~,T] = myProcrustes3(X',Y');
+        for j = noMatches+1:size(S,2)
+            newpoint = T.s*S(:,j)'*T.R + T.T(1,:);
+            pointcloud = [pointcloud,newpoint'];
+        end
+    end
+% figure(3)
+% plot3(S(1,1:b),S(2,1:b),S(3,1:b),'xm');
+% hold on
+% plot3(S(1,1:3),S(2,1:3),S(3,1:3),'.b');
     
 %     if i==2
 %         for j=1:3
@@ -98,10 +100,12 @@ for i=2:2
     %plot3(S(1,1:dodo),S(2,1:dodo),S(3,1:dodo),'.m');
 
 end
-
-
-
-
+% PC = pointcloud(:,1:800);
+% [X,Y] = meshgrid(PC(1,:),PC(2,:));
+% Z = griddata(PC(1,:),PC(2,:),PC(3,:), X, Y);
+% figure;
+% surf(X,Y,Z);
+% surf(PC(1,:),PC(2,:),PC(3,:))
 
 
 end
