@@ -42,14 +42,14 @@ for i=1:14
 %     plot(maX(1,1:3),maY(1,1:3),'or')
     
     %solve for affine ambiguity
-    A1 = M(1:2,:);
-    L0=pinv(A1'*A1);
-    save('M','M')
-    
-    L = lsqnonlin(@myfun,L0);
-    C = chol(L,'lower');
-    M = M*C;
-    S = pinv(C)*S;
+%     A1 = M(1:2,:);
+%     L0=pinv(A1'*A1);
+%     save('M','M')
+%     
+%     L = lsqnonlin(@myfun,L0);
+%     C = chol(L,'lower');
+%     M = M*C;
+%     S = pinv(C)*S;
   
 %     lsqnonlin(@bundleAdjustment,PX)
 %     PX = M*S+repmat(mP,1,noPoints);
