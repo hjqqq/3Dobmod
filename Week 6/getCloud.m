@@ -2,10 +2,9 @@ function getCloud
 close all
 
 clear PV
+global mP
 % this is loading the patchview matrix and the coordinates
 load('Teddy/PV')
-
-% global PV mP
 
 %pre-allocation of camera matrix and mean vector
 cameras = zeros(size(PV.pvMat,1)*2,3);
@@ -20,7 +19,7 @@ for i=1:14
     
     [~,noPoints] = size(Points);
     Points(1:2:end,:)=PV.xLoc(i:i+2,PV.indLinks(i):PV.indRechts(i));
-    Points(2:2:end,:)=PV.xLoc(i:i+2,PV.indLinks(i):PV.indRechts(i));
+    Points(2:2:end,:)=PV.yLoc(i:i+2,PV.indLinks(i):PV.indRechts(i));
     meanPoints = mean(Points,2);
     Points = Points - repmat(meanPoints,1,noPoints);
 
@@ -40,11 +39,12 @@ for i=1:14
 %     hold on
 %     plot(maX(1,1:3),maY(1,1:3),'or')
     
-    %solve for affine ambiguity
+%     %solve for affine ambiguity
 %     A1 = M(1:2,:);
 %     L0=pinv(A1'*A1);
 %     save('M','M')
 %     
+% 
 %     L = lsqnonlin(@myfun,L0);
 %     C = chol(L,'lower');
 %     M = M*C;
@@ -99,9 +99,9 @@ for i=1:14
 end
 
 PC=pointcloud;
+plot3(PC(1,:),PC(2,:),PC(3,:),'.')
 save('Teddy/PC','PC')
 % %Bundle adjustment
 % PX0 = [cameras(:);pointcloud(:)];
 % PX = lsqnonlin(@bundleAdjustment,PX0);
-
 end

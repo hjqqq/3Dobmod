@@ -45,10 +45,10 @@ N = 200; %run RANSAC N times
 % calculate the matches between the two images
 if Load
     if type=='b'
-    load('Teddy/featInd1','featInd1');
-    load('Teddy/featInd2','featInd2');
-    load('Teddy/featCoor1','featCoor1');
-    load('Teddy/featCoor2','featCoor2');
+    load('featInd1','featInd1');
+    load('featInd2','featInd2');
+    load('featCoor1','featCoor1');
+    load('featCoor2','featCoor2');
     end
     if type=='h'
 	load('featInd1H','featInd1H');
@@ -59,11 +59,14 @@ if Load
 else
     %if you get an error here please load the feat toolbox
     for i = 1:16 % later tot 16
-        [~,featInd1H{i},featInd2H{i},featCoor1H{i},featCoor2H{i}]= ...
+        [~,featInd1{i},featInd2{i},featCoor1{i},featCoor2{i}]= ...
             estFunMatrix(dataLoc{i},dataLoc{mod(i,16)+1},hesLoc{i},hesLoc{mod(i,16)+1},N);
     end
  end
-
+save('help/featInd1','featInd1');
+save('help/featInd2','featInd2');
+save('help/featCoor1','featCoor1');
+save('help/featCoor2','featCoor2');
 % the Point-view matrix, every row represents an image and every column a
 % point. On the rows the images are from 1 to 16
 % also filling it for the first time
@@ -135,7 +138,7 @@ coX=coorMat(:,1:2:end);
 coX=coX(:,ind);
 coY=coorMat(:,2:2:end);
 coY=coY(:,ind);
-for i = 2:4
+for i = 1:3
     figure(i)
     imshow(im{i})
     hold on;
