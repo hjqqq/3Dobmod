@@ -40,16 +40,15 @@ S = (W^0.5)*V';
 
 
 %solve for affine ambiguity
-% A1 = M(1:2,:);
-% L0=pinv(A1'*A1);
-% save('M','M')
-% 
-% L = lsqnonlin(@myfun,L0);
-% 
-% C = chol(L,'lower');
-% M = M*C;
-% S = pinv(C)*S;
-S=S*10
+A1 = M(1:2,:);
+L0=pinv(A1'*A1);
+save('M','M')
+
+L = lsqnonlin(@myfun,L0);
+
+C = chol(L,'lower');
+M = M*C;
+S = pinv(C)*S;
 hold on
 plot3(S(1,:),S(2,:),S(3,:),'.m');
 

@@ -107,8 +107,10 @@ for i=1:14
 
 end
 
-%Bundle adjustment
-PX0 = [cameras(:);pointcloud(:)];
-PX = lsqnonlin(@bundleAdjustment,PX0);
+PC=pointcloud;
+save('PC','PC')
+% %Bundle adjustment
+% PX0 = [cameras(:);pointcloud(:)];
+% PX = lsqnonlin(@bundleAdjustment,PX0);
 
 end
