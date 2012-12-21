@@ -1,4 +1,4 @@
-function getCloud
+function Flabidu
 close all
 
 % this is loading the patchview matrix and the coordinates
