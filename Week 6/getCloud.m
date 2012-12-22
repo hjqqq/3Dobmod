@@ -63,8 +63,6 @@ for i=1:14
     end
     
 %     CAM = cameras(1:i*2+4,:)
-%     CAMS = lsqnonlin(@bundleAdjustmentCam,CAM(:));
-%     cameras(1:i*2+4,:) = reshape(CAMS,i*2+4,3);
 %     PX0 = [CAM(:);pointcloud(:)];
 %     PX = lsqnonlin(@bundleAdjustment,PX0);
 

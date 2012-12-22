@@ -4,7 +4,7 @@ function triangulate()
 load('Teddy/PC')
 load('Teddy/PV')
 colors = PV.colors;
-k = 7;
+k = 5;
 
 Max = max(PC,[],2);
 Min = min(PC,[],2);
